@@ -1,0 +1,10 @@
+[gd_resource type="StandardMaterial3D" load_steps=2 format=3 uid="uid://71fju5x7ybmp"]
+
+[ext_resource type="Texture2D" uid="uid://b173ji7ldyasa" path="res://korone/yubi_mat_baseColor.png" id="1_psi0e"]
+
+[resource]
+transparency = 2
+alpha_scissor_threshold = 0.1
+alpha_antialiasing_mode = 0
+cull_mode = 2
+albedo_texture = ExtResource("1_psi0e")

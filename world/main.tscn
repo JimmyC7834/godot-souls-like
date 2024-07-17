@@ -1,0 +1,52 @@
+[gd_scene load_steps=7 format=3 uid="uid://bsoo2rem2hg5i"]
+
+[ext_resource type="Script" path="res://camera_controller.gd" id="1_g55f8"]
+[ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
+[ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
+
+[sub_resource type="Sky" id="Sky_t2s3g"]
+sky_material = SubResource("ProceduralSkyMaterial_mb8aw")
+
+[sub_resource type="Environment" id="Environment_afvp1"]
+background_mode = 2
+background_color = Color(0.0588235, 0.32549, 1, 1)
+background_energy_multiplier = 2.0
+sky = SubResource("Sky_t2s3g")
+
+[node name="World" type="Node3D"]
+
+[node name="Field" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+use_collision = true
+collision_layer = 32769
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Field"]
+size = Vector3(100, 5, 100)
+material = ExtResource("3_cuvda")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Field"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+operation = 2
+size = Vector3(98, 4, 98)
+material = ExtResource("3_cuvda")
+
+[node name="Camera" type="Node3D" parent="." groups=["CameraController"]]
+script = ExtResource("1_g55f8")
+follow_speed = 5.0
+
+[node name="h" type="Node3D" parent="Camera"]
+
+[node name="v" type="SpringArm3D" parent="Camera/h"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+collision_mask = 32768
+spring_length = 2.5
+
+[node name="Camera3D" type="Camera3D" parent="Camera/h/v"]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_afvp1")
+
+[node name="korone_root" parent="." instance=ExtResource("4_l3lo7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, 0)
