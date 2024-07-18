@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-
+# === CONST ===
 var G: float = ProjectSettings.get_setting("physics/3d/default_gravity")
 var EMPTY_FUNC: Callable = func(): pass
 const SPEED: float = 5.0
@@ -8,17 +8,21 @@ const JUMP_VELOCITY: float = 4.5
 const DIR_FOLLOW_VELOCITY: float = 10.0
 const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/conditions/"
 
+# === Nodes ===
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var right_hand: BoneAttachment3D = $Armature_002/Skeleton3D/RightHand
 @onready var tae: TimeActEvents = $TAE
 @onready var input_action_buffer: InputActionBuffer = $InputActionBuffer
+@onready var player_hurt_detector: PlayerHurtDetector = $PlayerHurtDetector
 
+# === Variables ===
 var run_timer: float = 0.25
 var facing_dir: Vector3
 var is_oneshot_1: bool = true
 var last_anim: StringName
 
+# === States ===
 var S_IDLE: State = State.new(
     "IDLE",
     func ():
@@ -100,7 +104,9 @@ var S_ANIM: State = State.new(
         tae.clear_all_event(),
     func (delta):
         var action: InputActionBuffer.ACTION = input_action_buffer.get_first_valid_action()
+        # check for animation cancels
         if action == InputActionBuffer.ACTION.R_ATK_L:
+            # cancel into the next animation by reading event args
             request_one_shot(
                 tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0],
                 tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1])
@@ -116,6 +122,12 @@ func _ready():
     
     sm.cur = S_IDLE
     sm.enter_state(S_IDLE)
+    
+    player_hurt_detector.on_area_enter.connect(
+        func (a, t):
+            request_one_shot("ImpactHead"))
+    
+    # reset state after animation chain is finished
     animation_tree.animation_finished.connect(func (a):
         if a == last_anim:
             sm.enter_state(S_IDLE))
@@ -129,6 +141,7 @@ func _physics_process(delta):
     move_and_slide()
 
 func update_velocity(delta, include_y: bool = false):
+    # apply root motion velocity
     var currentRotation = transform.basis.get_rotation_quaternion()
     var v: Vector3 = (currentRotation.normalized() * animation_tree.get_root_motion_position()) / delta
     if include_y:
@@ -146,6 +159,7 @@ func apply_gravity(delta):
 func follow_facing_dir(delta):
     if eventa(TimeActEvents.TAE.DISABLE_TURN): return
     
+    # turning the character to the input/facing direction
     if facing_dir != Vector3.ZERO:
         var angle = atan2(-facing_dir.x, -facing_dir.z)
         rotation.y = lerp_angle(rotation.y, angle, delta * DIR_FOLLOW_VELOCITY)
@@ -156,6 +170,7 @@ func update_facing_dir():
     
     facing_dir = direction.rotated(Vector3.UP, h_rot).normalized()
 
+# initiate an one shot animation and enter aniamtion state
 func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0):
     print("fire one shot " + anim_name)
     fire_oneshot(is_oneshot_1, anim_name, seek, scale)
@@ -163,6 +178,7 @@ func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 
     last_anim = anim_name
     sm.enter_state(S_ANIM)
 
+# fires one host animation with alternating nodes to apply animation blending
 func fire_oneshot(first: bool, anim_name: String, seek: float = -1.0, scale: float = 1.0):
     var idx: int = 1 if first else 2
     animation_tree.tree_root.get_node("ONESHOT_ANIM_%d" % idx).animation = anim_name
