@@ -1,9 +1,11 @@
-[gd_scene load_steps=8 format=3 uid="uid://bsoo2rem2hg5i"]
+[gd_scene load_steps=10 format=3 uid="uid://bsoo2rem2hg5i"]
 
 [ext_resource type="Script" path="res://camera_controller.gd" id="1_g55f8"]
 [ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
 [ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
 [ext_resource type="PackedScene" uid="uid://cqqxhs8dqxtqi" path="res://world/hurt_dummy.tscn" id="4_voew0"]
+[ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
+[ext_resource type="PackedScene" uid="uid://dqhkwt8yj753" path="res://korone/dummy_player.tscn" id="6_3vynq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
 
@@ -21,7 +23,6 @@ sky = SubResource("Sky_t2s3g")
 [node name="Field" type="CSGCombiner3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
 use_collision = true
-collision_layer = 32769
 
 [node name="CSGBox3D" type="CSGBox3D" parent="Field"]
 size = Vector3(100, 5, 100)
@@ -54,3 +55,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
 [node name="HurtDummy" parent="." instance=ExtResource("4_voew0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44179, 0, -9.02411)
+
+[node name="DebugPrint" type="Node2D" parent="."]
+position = Vector2(1100, 474)
+script = ExtResource("5_jxbxo")
+
+[node name="korone_root2" parent="." instance=ExtResource("6_3vynq")]
+transform = Transform3D(0.711585, 0, -0.7026, 0, 1, 0, 0.7026, 0, 0.711585, 6.28696, 1.90735e-06, -6.3466)

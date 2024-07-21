@@ -1,7 +1,5 @@
 extends GameEntity
 
-class_name PlayerController
-
 # === States ===
 var S_IDLE: State = State.new(
     "IDLE",
@@ -48,12 +46,8 @@ var S_RUNNING: State = State.new(
         animation_tree.set(movement_path("Running/blend_position"), Vector2(0, 1))
         animation_tree.set(movement_path("Running"), true),
     func (delta):
-        if Input.is_action_just_released("ROLL"):
-            sm.enter_state(S_WALKING)
-            return
-        
         fetch_input_cancel()
-            ,
+        ,
     func ():
         animation_tree.set(movement_path("Running"), false)
         velocity = Vector3.ZERO,
@@ -88,15 +82,14 @@ func _ready():
     
     player_hurt_detector.on_area_enter.connect(
         func (a, t):
-            if a is Weapon and eventa(TimeActEvents.TAE.PARRYING):
-                a.equipper.parried()
-                return
             if a is Weapon and eventa(TimeActEvents.TAE.STANDBREAK):
                 if a.equipper is PlayerController:
                     a.equipper.request_crit_atk()
                     return
             one_shot_interupt()
             request_one_shot("ImpactHead"))
+    
+    timer_action(InputActionBuffer.ACTION.R_ATK_L, 2)
     
     # reset state after animation chain is finished
     animation_tree.animation_finished.connect(func (a):
@@ -111,16 +104,19 @@ func fetch_input_cancel():
             request_one_shot(r.anim_light_atk)
         return
     
-    if input_action == InputActionBuffer.ACTION.R_ATK_H:
-        var r = player_equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)
-        if r is Weapon:
-            request_one_shot(r.anim_heavy_atk, 0.1, 1.0)
-        return
-    
     if input_action == InputActionBuffer.ACTION.ROLL:
-        request_one_shot("PC/Roll", 0.16, 1.5)
+        request_one_shot("Sprinting Forward Roll")
         return
 
-func request_crit_atk():
+func parried():
     one_shot_interupt()
-    request_one_shot("PC/Crit")
+    tae.set_event(TimeActEvents.TAE.STANDBREAK)
+    request_one_shot("ImpactHead", 0, 0.25)
+
+func get_3d_direction() -> Vector3:
+    return Vector3.ZERO
+
+func timer_action(action: InputActionBuffer.ACTION, sec: float):
+    await get_tree().create_timer(sec).timeout
+    input_action_buffer.queue.append([1, action])
+    timer_action(action, sec)

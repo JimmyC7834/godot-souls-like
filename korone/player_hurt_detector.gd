@@ -28,10 +28,9 @@ enum TYPE {
     LIMBS
 }
  
-# Area3D -> [in_head, in_body, in_limbs]
-var hit_map = {}
-var ignore_set: Array[Area3D] = []
-var f_hit: bool = false
+@export var player: Node3D
+
+var hit_count: int = 0
 
 signal on_head_enter(area: Area3D)
 signal on_body_enter(area: Area3D)
@@ -50,25 +49,16 @@ func _ready():
         a.area_exited.connect(remove_hit_area.bind(TYPE.LIMBS))
 
 func fire_signal(a: Area3D, type: TYPE, s: Signal):
-    if f_hit: return
-    if a in ignore_set: return
+    if player.tae.is_event_active(TimeActEvents.TAE.INVINCIBLE): return
+    if a is Equipment and a.equipper == player: return
 
-    if not a in hit_map.keys():
-        hit_map[a] = [false, false, false]
-
-    if hit_map[a] == [false, false, false]:
-        f_hit = true
+    if hit_count == 0:
         s.emit(a)
         on_area_enter.emit(a, type)
-        call_deferred("reset_hit_flag")
         print(TYPE.keys()[type] + " hit")
     
-    hit_map[a][type] = true
+    hit_count += 1
 
 func remove_hit_area(a: Area3D, type: TYPE):
-    if not a in hit_map.keys():
-        hit_map[a] = [false, false, false]
-    hit_map[a][type] = false
-
-func reset_hit_flag():
-    f_hit = false
+    if a is Equipment and a.equipper == player: return
+    hit_count -= 1
