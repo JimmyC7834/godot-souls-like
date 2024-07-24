@@ -26,10 +26,10 @@ func attack_behaviour(e: TimeActEvents.TAE):
     for a in hits:
         var hitted = entity.tae.get_event_args(e)[0]
         if a in hitted: continue
-        if not a is EntityHurtbox: continue
+        if not a is Hurtbox: continue
         # set target hitted
         print(name + " hitted " + a.name)
-        (a as EntityHurtbox).hit(w.hitbox)
+        (a as Hurtbox).hit(w.hitbox)
         
         hitted.append(a)
         entity.tae.set_event(e, hitted)

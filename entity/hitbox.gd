@@ -1,6 +1,6 @@
 extends Area3D
 
-class_name EntityHitbox
+class_name Hitbox
 
 var source
 

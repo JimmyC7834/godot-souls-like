@@ -1,6 +1,6 @@
 extends Area3D
 
-class_name EntityHurtbox
+class_name Hurtbox
 
 enum TYPE {
     STANDARD,
@@ -12,7 +12,7 @@ enum TYPE {
 @export var type: TYPE
 var entity: GameEntity
 
-signal on_hit(hitbox: EntityHitbox)
+signal on_hit(hitbox: Hitbox)
 
 func register(e: GameEntity):
     entity = e
@@ -21,5 +21,5 @@ func register(e: GameEntity):
     monitorable = true
     monitoring = true
 
-func hit(hitbox: EntityHitbox):
+func hit(hitbox: Hitbox):
     on_hit.emit(hitbox)

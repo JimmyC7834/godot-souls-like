@@ -87,7 +87,7 @@ func _ready():
     sm.enter_state(S_IDLE)
     
     player_hurt_detector.on_hit.connect(
-        func (hitbox: EntityHitbox, hurtbox: EntityHurtbox):
+        func (hitbox: Hitbox, hurtbox: Hurtbox):
             if hitbox.source is Weapon and eventa(TimeActEvents.TAE.PARRYING):
                 hitbox.source.equipper.parried()
                 return

@@ -16,7 +16,7 @@ const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/conditions/"
 @onready var right_hand: BoneAttachment3D = $Armature_002/Skeleton3D/RightHand
 @onready var tae: TimeActEvents = $TAE
 @onready var input_action_buffer: InputActionBuffer = $InputActionBuffer
-@onready var player_hurt_detector: PlayerHurtDetector = $PlayerHurtDetector
+@onready var player_hurt_detector: HurtboxCollection = $PlayerHurtDetector
 @onready var equipment: PlayerEquipment = $PlayerEquipment
 
 var components: Array[EntityComponent] = []

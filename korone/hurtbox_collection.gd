@@ -1,6 +1,6 @@
 extends Node
 
-class_name PlayerHurtDetector
+class_name HurtboxCollection
 
 @onready var hurtboxes: Array = [
     $"../Armature_002/Skeleton3D/HurtboxBody1/Area3D",
@@ -21,11 +21,11 @@ class_name PlayerHurtDetector
 var hit_counts = {}
 var hit_count: int = 0
 
-signal on_hit(hitbox: EntityHitbox, hurtbox: EntityHurtbox)
+signal on_hit(hitbox: Hitbox, hurtbox: Hurtbox)
 
 func _ready():
     for a in hurtboxes:
-        if a is EntityHurtbox:
+        if a is Hurtbox:
             a.register(player)
             a.on_hit.connect(hit.bind(a))
             #a.area_entered.connect(fire_signal.bind(a))
@@ -34,7 +34,7 @@ func _ready():
 func _process(delta):
     assert(hit_counts.values().all(func(x): return x >= 0), str(hit_counts.values()))
 
-func hit(hitbox: EntityHitbox, hurtbox: EntityHurtbox):
+func hit(hitbox: Hitbox, hurtbox: Hurtbox):
     on_hit.emit(hitbox, hurtbox)
 
 #func fire_signal(hitbox: Area3D, hurtbox: EntityHurtbox):

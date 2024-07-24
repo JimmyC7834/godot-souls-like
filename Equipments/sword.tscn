@@ -1,7 +1,7 @@
 [gd_scene load_steps=7 format=3 uid="uid://dthkyvekgx7ni"]
 
 [ext_resource type="Script" path="res://equipments/weapon.gd" id="1_ml35x"]
-[ext_resource type="Script" path="res://entity/entity_hitbox.gd" id="2_ejmsk"]
+[ext_resource type="Script" path="res://entity/hitbox.gd" id="2_ejmsk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ieyj1"]
 resource_name = "knight_texture"
