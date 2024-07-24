@@ -16,3 +16,6 @@ func parried_behaviour():
 
     entity.one_shot_interupt()
     entity.request_one_shot(standbreak_anim, seek, scale)
+
+static func type() -> String:
+    return "ParryStandBreak"

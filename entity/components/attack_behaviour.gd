@@ -13,7 +13,7 @@ func attack_behaviour_check():
     if entity.eventa(TimeActEvents.TAE.L_ATK):
         attack_behaviour(TimeActEvents.TAE.L_ATK)
             
-func attack_behaviour(e: TimeActEvents.TAE):
+func attack_behaviour(e: TimeActEvents.TAE) -> Hurtbox:
     if not e in [TimeActEvents.TAE.L_ATK, TimeActEvents.TAE.R_ATK]: return
     
     var w: Weapon
@@ -23,13 +23,24 @@ func attack_behaviour(e: TimeActEvents.TAE):
         w = entity.equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)        
     
     var hits: Array[Area3D] = w.hitbox.get_overlapping_areas()
+    var p: ParryStandBreak = entity.get_component(ParryStandBreak.type())
+    
     for a in hits:
         var hitted = entity.tae.get_event_args(e)[0]
         if a in hitted: continue
         if not a is Hurtbox: continue
         # set target hitted
         print(name + " hitted " + a.name)
-        (a as Hurtbox).hit(w.hitbox)
+        if p and p.is_parried_by((a as Hurtbox).entity):
+            p.parried_behaviour()
+        else:
+            a.hit(w.hitbox)
         
         hitted.append(a)
         entity.tae.set_event(e, hitted)
+        return a
+
+    return null
+
+static func type() -> String:
+    return "AttackBehaviour"

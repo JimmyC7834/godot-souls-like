@@ -19,7 +19,7 @@ const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/conditions/"
 @onready var player_hurt_detector: HurtboxCollection = $PlayerHurtDetector
 @onready var equipment: PlayerEquipment = $PlayerEquipment
 
-var components: Array[EntityComponent] = []
+var components = {}
 
 # === Variables ===
 var facing_dir: Vector3
@@ -34,7 +34,7 @@ var sm: State.StateMachine = State.StateMachine.new()
 func _ready():
     for c in get_children(true):
         if c is EntityComponent:
-            components.append(c)
+            components[c.type()] = c
             c.entity = self
             
     animation_tree.set(movement_path("Walking"), false)
@@ -79,6 +79,7 @@ func update_facing_dir():
 # initiate an one shot animation and enter aniamtion state
 func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0):
     print("fire one shot " + anim_name)
+    tae.clear_all_event()
     fire_oneshot(is_oneshot_1, anim_name, seek, scale)
     is_oneshot_1 = !is_oneshot_1
     last_anim = anim_name
@@ -95,6 +96,10 @@ func fire_oneshot(first: bool, anim_name: String, seek: float = -1.0, scale: flo
 func one_shot_interupt():
     var idx: int = 1 if !is_oneshot_1 else 2
     animation_tree.set("parameters/ONESHOT_%d/request" % idx, AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
+
+func get_component(t):
+    if not components.has(t): return null
+    return components[t]
 
 func parried():
     pass

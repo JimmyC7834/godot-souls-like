@@ -75,6 +75,9 @@ var _S_ANIM: State = State.new(
             request_one_shot(
                 tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0],
                 tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1])
+        
+        var a = get_component(AttackBehaviour.type()) as AttackBehaviour
+        a.attack_behaviour_check()
         ,
     EMPTY_FUNC,
 )
