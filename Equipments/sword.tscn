@@ -1,6 +1,7 @@
-[gd_scene load_steps=6 format=3 uid="uid://dthkyvekgx7ni"]
+[gd_scene load_steps=7 format=3 uid="uid://dthkyvekgx7ni"]
 
-[ext_resource type="Script" path="res://Equipments/weapon.gd" id="1_bxm5r"]
+[ext_resource type="Script" path="res://equipments/weapon.gd" id="1_ml35x"]
+[ext_resource type="Script" path="res://entity/entity_hitbox.gd" id="2_ejmsk"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ieyj1"]
 resource_name = "knight_texture"
@@ -45,20 +46,22 @@ shadow_mesh = SubResource("ArrayMesh_xy78p")
 radius = 0.126775
 height = 0.858
 
-[node name="Sword" type="Area3D"]
+[node name="Sword" type="Node3D" node_paths=PackedStringArray("hitbox")]
 transform = Transform3D(0.67621, 0.67621, 0.292372, -0.707107, 0.707107, 1.05367e-08, -0.206738, -0.206738, 0.956305, 0.015, 0.055, 0.025)
-collision_layer = 16
-collision_mask = 0
-script = ExtResource("1_bxm5r")
+script = ExtResource("1_ml35x")
 anim_light_atk = &"SlashDiagonal"
 anim_heavy_atk = &"Parry"
 anim_run_atk = &"Melee360Forward"
+hitbox = NodePath("EntityHitbox")
 
 [node name="sword_1handed" type="MeshInstance3D" parent="."]
 transform = Transform3D(27.0484, 27.0484, 11.6949, -28.2843, 28.2843, -4.76837e-07, -8.26952, -8.26952, 38.2522, 0.015, 0.055, 0.025)
 mesh = SubResource("ArrayMesh_gwm1k")
 skeleton = NodePath("")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(0.67621, 0.67621, 0.292372, -0.707107, 0.707107, -2.98023e-08, -0.206738, -0.206738, 0.956305, 0.214482, 0.263597, -0.0359877)
+[node name="EntityHitbox" type="Area3D" parent="."]
+script = ExtResource("2_ejmsk")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="EntityHitbox"]
+transform = Transform3D(0.67621, 0.67621, 0.292372, -0.707107, 0.707107, 0, -0.206738, -0.206738, 0.956305, 0.214482, 0.263597, -0.0359877)
 shape = SubResource("CapsuleShape3D_orbdv")

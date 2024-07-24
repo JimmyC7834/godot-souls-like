@@ -1,5 +1,10 @@
-extends Area3D
+extends Node3D
 
 class_name Equipment
 
-var equipper: Node3D
+var equipper: GameEntity:
+    set(v):
+        equipper = v
+        on_equipper_changed.emit(v)
+
+signal on_equipper_changed(e)

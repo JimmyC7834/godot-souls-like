@@ -67,8 +67,6 @@ var _S_ANIM: State = State.new(
             request_one_shot(
                 tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0],
                 tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1])
-        
-        attack_behaviour()
         ,
     EMPTY_FUNC,
 )
@@ -80,7 +78,7 @@ func _ready():
     sm.cur = S_IDLE
     sm.enter_state(S_IDLE)
     
-    player_hurt_detector.on_area_enter.connect(
+    player_hurt_detector.on_hit.connect(
         func (a, t):
             if a is Weapon and eventa(TimeActEvents.TAE.STANDBREAK):
                 if a.equipper is PlayerController:
@@ -99,7 +97,7 @@ func _ready():
 func fetch_input_cancel():
     var input_action = input_action_buffer.get_first_valid_action()
     if input_action == InputActionBuffer.ACTION.R_ATK_L:
-        var r = player_equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)
+        var r = equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)
         if r is Weapon:
             request_one_shot(r.anim_light_atk)
         return

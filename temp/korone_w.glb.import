@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://ct4fhvw4mi42"
-path="res://.godot/imported/parry_crit.glb-5f05ffca967eaa2fa2bc92bac39c94f2.scn"
+uid="uid://p56e72xq8bnc"
+path="res://.godot/imported/korone_w.glb-64867f6df7cc0e4c1810978164dfba2f.scn"
 
 [deps]
 
-source_file="res://parry_crit.glb"
-dest_files=["res://.godot/imported/parry_crit.glb-5f05ffca967eaa2fa2bc92bac39c94f2.scn"]
+source_file="res://temp/korone_w.glb"
+dest_files=["res://.godot/imported/korone_w.glb-64867f6df7cc0e4c1810978164dfba2f.scn"]
 
 [params]
 

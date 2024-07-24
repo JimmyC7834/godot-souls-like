@@ -16,6 +16,7 @@ enum TAE {
     DISABLE_TURN = 15,
     DISABLE_GRAVITY = 16,
 
+    ATK_BEHAVIOUR = 20,
     STANDBREAK = 21,
     PARRYING = 22,
     GUARDING = 23,

@@ -2,12 +2,9 @@ extends Node
 
 class_name PlayerHurtDetector
 
-@onready var body_hurtboxes: Array[Area3D] = [
+@onready var hurtboxes: Array = [
     $"../Armature_002/Skeleton3D/HurtboxBody1/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxBody2/Area3D"
-]
-
-@onready var limbs_hurtboxes: Array[Area3D] = [
+    $"../Armature_002/Skeleton3D/HurtboxBody2/Area3D",
     $"../Armature_002/Skeleton3D/HurtboxLegUpL/Area3D",
     $"../Armature_002/Skeleton3D/HurtboxLegL/Area3D",
     $"../Armature_002/Skeleton3D/HurtboxLegUpR/Area3D",
@@ -16,49 +13,45 @@ class_name PlayerHurtDetector
     $"../Armature_002/Skeleton3D/HurtBoxArmL/Area3D",
     $"../Armature_002/Skeleton3D/HurtBoxArmUpR/Area3D",
     $"../Armature_002/Skeleton3D/HurtBoxArmR/Area3D",
-]
-
-@onready var head_hurtboxes: Array[Area3D] = [
     $"../Armature_002/Skeleton3D/HurtboxHead/Area3D"
 ]
 
-enum TYPE {
-    HEAD,
-    BODY,
-    LIMBS
-}
- 
 @export var player: Node3D
 
+var hit_counts = {}
 var hit_count: int = 0
 
-signal on_head_enter(area: Area3D)
-signal on_body_enter(area: Area3D)
-signal on_limbs_enter(area: Area3D)
-signal on_area_enter(area: Area3D, type: TYPE)
+signal on_hit(hitbox: EntityHitbox, hurtbox: EntityHurtbox)
 
 func _ready():
-    for a in head_hurtboxes:
-        a.area_entered.connect(fire_signal.bind(TYPE.HEAD, on_head_enter))
-        a.area_exited.connect(remove_hit_area.bind(TYPE.HEAD))
-    for a in body_hurtboxes:
-        a.area_entered.connect(fire_signal.bind(TYPE.BODY, on_body_enter))
-        a.area_exited.connect(remove_hit_area.bind(TYPE.BODY))
-    for a in limbs_hurtboxes:
-        a.area_entered.connect(fire_signal.bind(TYPE.LIMBS, on_limbs_enter))
-        a.area_exited.connect(remove_hit_area.bind(TYPE.LIMBS))
+    for a in hurtboxes:
+        if a is EntityHurtbox:
+            a.register(player)
+            a.on_hit.connect(hit.bind(a))
+            #a.area_entered.connect(fire_signal.bind(a))
+            #a.area_exited.connect(remove_hit_area.bind(a))
 
-func fire_signal(a: Area3D, type: TYPE, s: Signal):
-    if player.tae.is_event_active(TimeActEvents.TAE.INVINCIBLE): return
-    if a is Equipment and a.equipper == player: return
+func _process(delta):
+    assert(hit_counts.values().all(func(x): return x >= 0), str(hit_counts.values()))
 
-    if hit_count == 0:
-        s.emit(a)
-        on_area_enter.emit(a, type)
-        print(TYPE.keys()[type] + " hit")
-    
-    hit_count += 1
+func hit(hitbox: EntityHitbox, hurtbox: EntityHurtbox):
+    on_hit.emit(hitbox, hurtbox)
 
-func remove_hit_area(a: Area3D, type: TYPE):
-    if a is Equipment and a.equipper == player: return
-    hit_count -= 1
+#func fire_signal(hitbox: Area3D, hurtbox: EntityHurtbox):
+    #if player.tae.is_event_active(TimeActEvents.TAE.INVINCIBLE): return
+    #if hitbox is EntityHitbox and hitbox.source is Weapon and hitbox.source.equipper == player: return
+#
+    #if not hitbox in hit_counts.keys():
+        #hit_counts[hitbox] = 0
+#
+    #if hit_counts[hitbox] == 0:
+        #on_area_enter.emit(hitbox, hurtbox)
+    #
+    #hit_counts[hitbox] += 1
+#
+#func remove_hit_area(hitbox: Area3D, hurtbox: EntityHurtbox):
+    #if hitbox is EntityHitbox and hitbox.source is Weapon and hitbox.source.equipper == player: return
+    #if not hitbox in hit_counts.keys():
+        #hit_counts[hitbox] = 0
+    #else:
+        #hit_counts[hitbox] -= 1

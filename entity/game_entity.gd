@@ -17,7 +17,9 @@ const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/conditions/"
 @onready var tae: TimeActEvents = $TAE
 @onready var input_action_buffer: InputActionBuffer = $InputActionBuffer
 @onready var player_hurt_detector: PlayerHurtDetector = $PlayerHurtDetector
-@onready var player_equipment: PlayerEquipment = $PlayerEquipment
+@onready var equipment: PlayerEquipment = $PlayerEquipment
+
+var components: Array[EntityComponent] = []
 
 # === Variables ===
 var facing_dir: Vector3
@@ -30,6 +32,11 @@ var S_ANIM: State
 var sm: State.StateMachine = State.StateMachine.new()
 
 func _ready():
+    for c in get_children(true):
+        if c is EntityComponent:
+            components.append(c)
+            c.entity = self
+            
     animation_tree.set(movement_path("Walking"), false)
     animation_tree.set(movement_path("Running"), false)
 
@@ -66,10 +73,8 @@ func follow_facing_dir(delta):
         rotation.y = lerp_angle(rotation.y, angle, delta * DIR_FOLLOW_VELOCITY)
 
 func update_facing_dir():
-    var h_rot = $"../Camera/h".global_transform.basis.get_euler().y
     var direction: Vector3 = get_3d_direction()
-    
-    facing_dir = direction.rotated(Vector3.UP, h_rot).normalized()
+    facing_dir = direction.normalized()
 
 # initiate an one shot animation and enter aniamtion state
 func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0):
@@ -91,35 +96,11 @@ func one_shot_interupt():
     var idx: int = 1 if !is_oneshot_1 else 2
     animation_tree.set("parameters/ONESHOT_%d/request" % idx, AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
 
-func attack_behaviour():
-    if eventa(TimeActEvents.TAE.R_ATK):
-        var r_w: Weapon = player_equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)
-        for a in r_w.get_overlapping_areas():
-            var hitted = tae.get_event_args(TimeActEvents.TAE.R_ATK)[0]
-            if a in hitted: continue
-            # set target hitted
-            print(name + " hitted " + a.name)
-            
-            hitted.append(a)
-            tae.set_event(TimeActEvents.TAE.R_ATK, hitted)
-    
-    if eventa(TimeActEvents.TAE.L_ATK):
-        var l_w: Weapon = player_equipment.get_equipment(PlayerEquipment.SLOT.LEFT_HAND)
-        for a in l_w.get_overlapping_areas():
-            var hitted = tae.get_event_args(TimeActEvents.TAE.L_ATK)[0]
-            if a in hitted: continue
-            # set target hitted
-            print(name + " hitted " + a.name)
-            
-            hitted.append(a)
-            tae.set_event(TimeActEvents.TAE.L_ATK, hitted)
-
-func hurted():
-    one_shot_interupt()
-    request_one_shot("PC/StandBreak2")
-
 func parried():
     pass
+
+func is_state(name: String):
+    return sm.cur.name == name
 
 func eventa(e: TimeActEvents.TAE):
     return tae.is_event_active(e)
@@ -128,6 +109,4 @@ func movement_path(str: String):
     return ANIM_TREE_MOVEMENT_PATH + str
 
 func get_3d_direction() -> Vector3:
-    return Vector3(Input.get_action_strength("MOVE_LEFT") - Input.get_action_strength("MOVE_RIGHT"), 
-                    0, 
-                    Input.get_action_strength("MOVE_FORWARD") - Input.get_action_strength("MOVE_BACKWARD"))
+    return Vector3.ZERO
