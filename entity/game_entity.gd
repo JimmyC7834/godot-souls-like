@@ -27,6 +27,7 @@ var is_oneshot_1: bool = true
 var last_anim: StringName
 
 # === States ===
+var S_IDLE: State
 var S_ANIM: State
 
 var sm: State.StateMachine = State.StateMachine.new()
@@ -39,6 +40,11 @@ func _ready():
             
     animation_tree.set(movement_path("Walking"), false)
     animation_tree.set(movement_path("Running"), false)
+    
+    # reset state after animation chain is finished
+    animation_tree.animation_finished.connect(func (a):
+        if a == last_anim:
+            sm.enter_state(S_IDLE))
 
 func _physics_process(delta):
     update_facing_dir()

@@ -1,7 +1,7 @@
 extends GameEntity
 
 # === States ===
-var S_IDLE: State = State.new(
+var _S_IDLE: State = State.new(
     "IDLE",
     func ():
         animation_tree.set(movement_path("Idle"), true)
@@ -72,6 +72,7 @@ var _S_ANIM: State = State.new(
 )
 
 func _ready():
+    S_IDLE = _S_IDLE
     S_ANIM = _S_ANIM
     super._ready()
     

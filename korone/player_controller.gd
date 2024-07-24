@@ -5,7 +5,7 @@ class_name PlayerController
 @onready var stand_break_parry = $StandBreakParry
 
 # === States ===
-var S_IDLE: State = State.new(
+var _S_IDLE: State = State.new(
     "IDLE",
     func ():
         animation_tree.set(movement_path("Idle"), true)
@@ -83,6 +83,7 @@ var _S_ANIM: State = State.new(
 )
 
 func _ready():
+    S_IDLE = _S_IDLE
     S_ANIM = _S_ANIM
     super._ready()
     
@@ -100,11 +101,6 @@ func _ready():
                     return
             one_shot_interupt()
             request_one_shot("ImpactHead"))
-    
-    # reset state after animation chain is finished
-    animation_tree.animation_finished.connect(func (a):
-        if a == last_anim:
-            sm.enter_state(S_IDLE))
 
 func update_facing_dir():
     var h_rot = $"../Camera/h".global_transform.basis.get_euler().y

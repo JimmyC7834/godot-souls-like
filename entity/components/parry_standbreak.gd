@@ -3,7 +3,7 @@ extends EntityComponent
 class_name ParryStandBreak
 
 @export var standbreak_anim: StringName
-@export var seek: float = 0.0
+@export var seek: float = -1.0
 @export var scale: float = 1.0
 
 func is_parried_by(e: GameEntity):

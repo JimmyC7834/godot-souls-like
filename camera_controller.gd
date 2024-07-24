@@ -20,9 +20,16 @@ func _input(event):
     if event is InputEventMouseMotion:
         camroot_h -= event.relative.x * h_sensitivity
         camroot_v -= event.relative.y * v_sensitivity
+    
+    if Input.is_action_just_pressed("DEBUG_SHOW_MOUSE"):
+        Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
+    elif Input.is_action_just_released("DEBUG_SHOW_MOUSE"):
+        Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta):
+    if Input.mouse_mode == Input.MOUSE_MODE_VISIBLE: return
+    
     camroot_v= clamp(camroot_v, deg_to_rad(cam_v_min), deg_to_rad(cam_v_max))
     h.rotation.y = lerpf(h.rotation.y, camroot_h, h_acceleration * delta)
     v.rotation.x = lerpf(v.rotation.x, camroot_v, v_acceleration * delta)
