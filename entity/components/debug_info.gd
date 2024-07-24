@@ -9,8 +9,8 @@ func _ready():
                 func():
                     Global.debug_entity = entity)
 
-            entity.mouse_exited.connect(
-                func():
-                    if Global.debug_entity == entity:
-                        Global.debug_entity = null)
+            #entity.mouse_exited.connect(
+                #func():
+                    #if Global.debug_entity == entity:
+                        #Global.debug_entity = null)
     )

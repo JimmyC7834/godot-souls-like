@@ -29,15 +29,17 @@ func attack_behaviour(e: TimeActEvents.TAE) -> Hurtbox:
         var hitted = entity.tae.get_event_args(e)[0]
         if a in hitted: continue
         if not a is Hurtbox: continue
+        if a.entity == entity: continue
+        
         # set target hitted
         print(name + " hitted " + a.name)
-        if p and p.is_parried_by((a as Hurtbox).entity):
+        if p and p.is_parried_by(a.entity):
             p.parried_behaviour()
         else:
             a.hit(w.hitbox)
-        
-        hitted.append(a)
-        entity.tae.set_event(e, hitted)
+
+        hitted.append(a.entity)
+        entity.tae.event_args[e] = [hitted, null, null]
         return a
 
     return null

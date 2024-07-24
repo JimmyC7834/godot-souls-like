@@ -2,7 +2,7 @@ extends Node
 
 class_name EntityComponent
 
-@export var entity: GameEntity:
+var entity: GameEntity:
     set(v):
         entity = v
         on_entity_changed.emit()

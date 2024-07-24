@@ -1,6 +1,6 @@
-extends Node
+extends EntityComponent
 
-class_name InputActionBuffer
+class_name PlayerInputController
 
 enum ACTION {
     N = 0,
@@ -11,6 +11,7 @@ enum ACTION {
     ITEM_USE = 5,
     CAST = 6,
     RUN = 7,
+    STOP_RUN = 8,
     
     R_ATK = 10,
     R_ATK_L = 11,
@@ -32,6 +33,8 @@ var ACTION_EVENT_MAP = {
         return tae.is_event_active(TimeActEvents.TAE.ROLL_CANCEL),
     ACTION.RUN: func():
         return tae.is_event_active(TimeActEvents.TAE.MOVEMENT_CANCEL),
+    ACTION.STOP_RUN: func():
+        return true,
 }
 
 const ACTION_MAP = {
@@ -62,26 +65,36 @@ func _input(e):
             queue.append([1, ACTION_MAP[key]])
             print("pressed " + key)
 
+func _process(delta):
+    entity.dir_3d = get_3d_direction()
+    var action: ACTION = get_first_valid_action()
+    if action != ACTION.N:
+        entity.action_queue.append(action)
+
 func _physics_process(delta):
     if !enable: return    
     
     if Input.is_action_pressed("ROLL"):
         run_timer -= delta
         if run_timer < 0:
-            run_timer = 0.25
             queue.append([1, ACTION.RUN])
     elif Input.is_action_just_released("ROLL"):
         if run_timer > 0:
             queue.append([1, ACTION.ROLL])
+        else:
+            queue.append([1, ACTION.STOP_RUN])            
         run_timer = 0.25            
     
     clear_overtime_actions()
+
+static func type() -> String:
+    return "PlayerInputController"
 
 func get_first_valid_action() -> ACTION:
     var action: ACTION = ACTION.N
     for a in queue:
         if is_action_allowed(a[1]):
-            clear()
+            clear_actions()
             action = a[1]
             print("get action " + ACTION.keys()[action])
             break
@@ -95,13 +108,19 @@ func clear_overtime_actions():
             queue = queue.slice(i + 1, queue.size())
             break
 
-func pop():
+func pop_action():
     if queue.is_empty():
         return ACTION.N
     return queue.pop_front()
 
-func clear():
+func clear_actions():
     queue.clear()
 
 func is_action_allowed(a: ACTION):
     return ACTION_EVENT_MAP[a].call()
+
+
+func get_3d_direction() -> Vector3:
+    return Vector3(Input.get_action_strength("MOVE_LEFT") - Input.get_action_strength("MOVE_RIGHT"), 
+                    0, 
+                    Input.get_action_strength("MOVE_FORWARD") - Input.get_action_strength("MOVE_BACKWARD"))

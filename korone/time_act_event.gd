@@ -50,9 +50,6 @@ func set_events(arr: Array[TAE]):
     for e in arr:
         set_event(e)
 
-func set_event_kesy(key: TAEKey):
-    pass
-
 func set_event(e: TAE, arg1 = null, arg2 = null, arg3 = null):
     event_active[e] = true
     event_args[e] = [arg1, arg2, arg3]

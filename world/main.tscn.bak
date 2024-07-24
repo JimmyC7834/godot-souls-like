@@ -3,9 +3,9 @@
 [ext_resource type="Script" path="res://camera_controller.gd" id="1_g55f8"]
 [ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
 [ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
-[ext_resource type="PackedScene" uid="uid://dmxxvbvs5gyek" path="res://korone/dummy_korone.tscn" id="4_tjfal"]
 [ext_resource type="PackedScene" uid="uid://cqqxhs8dqxtqi" path="res://world/hurt_dummy.tscn" id="4_voew0"]
 [ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
+[ext_resource type="PackedScene" uid="uid://dqhkwt8yj753" path="res://korone/dummy_player.tscn" id="6_3vynq"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
 
@@ -53,12 +53,12 @@ environment = SubResource("Environment_afvp1")
 [node name="korone_root" parent="." instance=ExtResource("4_l3lo7")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
 
-[node name="korone_root2" parent="." instance=ExtResource("4_tjfal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55835, 0, -6.12357)
-
 [node name="HurtDummy" parent="." instance=ExtResource("4_voew0")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44179, 0, -9.02411)
 
 [node name="DebugPrint" type="Node2D" parent="."]
 position = Vector2(1100, 474)
 script = ExtResource("5_jxbxo")
+
+[node name="korone_root2" parent="." instance=ExtResource("6_3vynq")]
+transform = Transform3D(0.711585, 0, -0.7026, 0, 1, 0, 0.7026, 0, 0.711585, 6.28696, 1.90735e-06, -6.3466)

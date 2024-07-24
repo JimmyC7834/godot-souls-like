@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://y5dbec8h84r"
-path="res://.godot/imported/korone_root.glb-82f19665025bfd34240254be3f1fa8d0.scn"
+path="res://.godot/imported/korone_root.glb-dcbde211431fec5701571bb5280aa7b2.scn"
 
 [deps]
 
-source_file="res://korone/korone_root.glb"
-dest_files=["res://.godot/imported/korone_root.glb-82f19665025bfd34240254be3f1fa8d0.scn"]
+source_file="res://korone/res/korone_root.glb"
+dest_files=["res://.godot/imported/korone_root.glb-dcbde211431fec5701571bb5280aa7b2.scn"]
 
 [params]
 

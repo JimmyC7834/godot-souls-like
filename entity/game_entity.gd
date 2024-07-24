@@ -13,16 +13,16 @@ const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/conditions/"
 # === Nodes ===
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
-@onready var right_hand: BoneAttachment3D = $Armature_002/Skeleton3D/RightHand
 @onready var tae: TimeActEvents = $TAE
-@onready var input_action_buffer: InputActionBuffer = $InputActionBuffer
-@onready var player_hurt_detector: HurtboxCollection = $PlayerHurtDetector
+
 @onready var equipment: PlayerEquipment = $PlayerEquipment
 
+var action_queue: Array[PlayerInputController.ACTION] = []
 var components = {}
 
 # === Variables ===
-var facing_dir: Vector3
+var facing_dir: Vector3 = Vector3.ZERO
+var dir_3d: Vector3 = Vector3.ZERO
 var is_oneshot_1: bool = true
 var last_anim: StringName
 
@@ -79,7 +79,7 @@ func follow_facing_dir(delta):
         rotation.y = lerp_angle(rotation.y, angle, delta * DIR_FOLLOW_VELOCITY)
 
 func update_facing_dir():
-    var direction: Vector3 = get_3d_direction()
+    var direction: Vector3 = dir_3d
     facing_dir = direction.normalized()
 
 # initiate an one shot animation and enter aniamtion state
@@ -107,8 +107,15 @@ func get_component(t):
     if not components.has(t): return null
     return components[t]
 
-func parried():
-    pass
+func peek_action() -> PlayerInputController.ACTION:
+    if action_queue.is_empty():
+        return PlayerInputController.ACTION.N
+    return action_queue.front()
+
+func fetch_action() -> PlayerInputController.ACTION:
+    if action_queue.is_empty():
+        return PlayerInputController.ACTION.N
+    return action_queue.pop_front()
 
 func is_state(name: String):
     return sm.cur.name == name
@@ -118,6 +125,3 @@ func eventa(e: TimeActEvents.TAE):
 
 func movement_path(str: String):
     return ANIM_TREE_MOVEMENT_PATH + str
-
-func get_3d_direction() -> Vector3:
-    return Vector3.ZERO

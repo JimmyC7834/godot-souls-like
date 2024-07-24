@@ -1,4 +1,4 @@
-extends Node
+extends EntityComponent
 
 class_name HurtboxCollection
 
@@ -16,26 +16,29 @@ class_name HurtboxCollection
     $"../Armature_002/Skeleton3D/HurtboxHead/Area3D"
 ]
 
-@export var player: Node3D
-
 var hit_counts = {}
 var hit_count: int = 0
 
 signal on_hit(hitbox: Hitbox, hurtbox: Hurtbox)
 
 func _ready():
-    for a in hurtboxes:
-        if a is Hurtbox:
-            a.register(player)
-            a.on_hit.connect(hit.bind(a))
-            #a.area_entered.connect(fire_signal.bind(a))
-            #a.area_exited.connect(remove_hit_area.bind(a))
+    on_entity_changed.connect(
+        func ():
+            for a in hurtboxes:
+                if a is Hurtbox:
+                    a.register(entity)
+                    a.on_hit.connect(hit.bind(a))
+    )
 
 func _process(delta):
     assert(hit_counts.values().all(func(x): return x >= 0), str(hit_counts.values()))
 
 func hit(hitbox: Hitbox, hurtbox: Hurtbox):
+    if hitbox.source is Weapon and hitbox.source.equipper == entity: return
     on_hit.emit(hitbox, hurtbox)
+
+static func type() -> String:
+    return "HurtboxCollection"
 
 #func fire_signal(hitbox: Area3D, hurtbox: EntityHurtbox):
     #if player.tae.is_event_active(TimeActEvents.TAE.INVINCIBLE): return
