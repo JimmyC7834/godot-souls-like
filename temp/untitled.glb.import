@@ -3,7 +3,7 @@
 importer="animation_library"
 importer_version=1
 type="AnimationLibrary"
-uid="uid://b5qxy0mkm3lxf"
+uid="uid://7khift3rhke6"
 path="res://.godot/imported/untitled.glb-eaf5a9bc21ca3784ce18d2719a418854.res"
 
 [deps]
@@ -31,7 +31,7 @@ animation/remove_immutable_tracks=true
 import_script/path=""
 _subresources={
 "nodes": {
-"PATH:Armature/Skeleton3D": {
+"PATH:Armature_001/Skeleton3D": {
 "retarget/bone_map": null
 }
 }

@@ -67,6 +67,8 @@ func _input(e):
 
 func _process(delta):
     entity.dir_3d = get_3d_direction()
+    entity.blend_position = Vector2(-entity.dir_3d.x, entity.dir_3d.z) if entity.camera.lock_on else Vector2(0, 1)
+    
     var action: ACTION = get_first_valid_action()
     if action != ACTION.N:
         entity.action_queue.append(action)
@@ -118,7 +120,6 @@ func clear_actions():
 
 func is_action_allowed(a: ACTION):
     return ACTION_EVENT_MAP[a].call()
-
 
 func get_3d_direction() -> Vector3:
     return Vector3(Input.get_action_strength("MOVE_LEFT") - Input.get_action_strength("MOVE_RIGHT"), 

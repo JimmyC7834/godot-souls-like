@@ -2,13 +2,16 @@ extends GameEntity
 
 class_name PlayerEntity
 
-@onready var stand_break_parry = $StandBreakParry
+@onready var camera: PlayerCamera = $"../Camera"
+
+var blend_position: Vector2 = Vector2(0, 1)
 
 # === States ===
 var _S_IDLE: State = State.new(
     "IDLE",
     func ():
-        animation_tree.set(movement_path("Idle"), true)
+        animation_tree.set("parameters/Movement/conditions/Idle", true)
+        tae.clear_all_event()
         tae.set_event(1),        
     func (delta):
         var input_dir = dir_3d
@@ -19,18 +22,22 @@ var _S_IDLE: State = State.new(
         fetch_action_cancel()
             ,
     func ():
-        animation_tree.set(movement_path("Idle"), false),
+        animation_tree.set("parameters/Movement/conditions/Idle", false),
 )
 
 var S_WALKING: State = State.new(
     "WALKING",
     func ():
-        animation_tree.set(movement_path("Walking/blend_position"), Vector2(0, 1))
-        animation_tree.set(movement_path("Walking"), true)
-        
+        animation_tree.set("parameters/Movement/conditions/Walking", true)
+
+        tae.clear_all_event()        
         tae.set_event(1)
         tae.set_event(4),
     func (delta):
+        var b_pos: Vector2 = animation_tree.get("parameters/Movement/Walking/blend_position")
+        animation_tree.set("parameters/Movement/Walking/blend_position",
+                            lerp(b_pos, blend_position, DIR_FOLLOW_VELOCITY * delta))
+
         var input_dir = dir_3d
         
         if input_dir.length() == 0:
@@ -44,16 +51,20 @@ var S_WALKING: State = State.new(
         fetch_action_cancel()
             ,
     func ():
-        animation_tree.set(movement_path("Walking"), false)
+        animation_tree.set("parameters/Movement/conditions/Walking", false)
         velocity = Vector3.ZERO,
 )
 
 var S_RUNNING: State = State.new(
     "RUNNING",
     func ():
-        animation_tree.set(movement_path("Running/blend_position"), Vector2(0, 1))
-        animation_tree.set(movement_path("Running"), true),
+        animation_tree.set("parameters/Movement/conditions/Running", true)
+        tae.clear_all_event(),
     func (delta):
+        var b_pos: Vector2 = animation_tree.get("parameters/Movement/Running/blend_position")
+        animation_tree.set("parameters/Movement/Running/blend_position",
+                            lerp(b_pos, blend_position, DIR_FOLLOW_VELOCITY * delta))
+
         if peek_action() == PlayerInputController.ACTION.STOP_RUN:
             sm.enter_state(S_WALKING)
             return
@@ -61,7 +72,7 @@ var S_RUNNING: State = State.new(
         fetch_action_cancel()
             ,
     func ():
-        animation_tree.set(movement_path("Running"), false)
+        animation_tree.set("parameters/Movement/conditions/Running", false)
         velocity = Vector3.ZERO,
 )
 
@@ -98,9 +109,6 @@ func _ready():
     if h:
         h.on_hit.connect(
             func (hitbox: Hitbox, hurtbox: Hurtbox):
-                if hitbox.source is Weapon and eventa(TimeActEvents.TAE.PARRYING):
-                    hitbox.source.equipper.parried()
-                    return
                 if hitbox.source is Weapon and eventa(TimeActEvents.TAE.STANDBREAK):
                     if hitbox.source.equipper is PlayerEntity:
                         hitbox.source.equipper.request_crit_atk()
@@ -109,10 +117,12 @@ func _ready():
                 request_one_shot("ImpactHead"))
 
 func update_facing_dir():
-    var h_rot = $"../Camera/h".global_transform.basis.get_euler().y
-    var direction: Vector3 = dir_3d
-    
-    facing_dir = direction.rotated(Vector3.UP, h_rot).normalized()
+    if camera.lock_on:
+        facing_dir = -global_position.direction_to(camera.lock_on.global_position)
+    else:
+        var h_rot = $"../Camera/h".global_transform.basis.get_euler().y
+        var direction: Vector3 = dir_3d
+        facing_dir = direction.rotated(Vector3.UP, h_rot).normalized()
 
 func fetch_action_cancel():
     var action = fetch_action()
@@ -128,8 +138,13 @@ func fetch_action_cancel():
                 request_one_shot(r.anim_heavy_atk, 0.1, 1.0)
     
         PlayerInputController.ACTION.ROLL:
-            request_one_shot("PC/Roll", 0.16, 1.5)
+            var angle = atan2(-dir_3d.normalized().x, -dir_3d.normalized().z)
+            rotation.y = angle
+            call_deferred("request_one_shot", "PC/Roll", -1.0, 1.5)
+            #request_one_shot("PC/Roll", -1.0, 1.5)
 
+        PlayerInputController.ACTION.N:
+            pass
         _:
             push_warning("fetched unknown ACTION " + str(action))
 

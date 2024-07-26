@@ -1,6 +1,6 @@
 [gd_scene load_steps=10 format=3 uid="uid://bsoo2rem2hg5i"]
 
-[ext_resource type="Script" path="res://camera_controller.gd" id="1_g55f8"]
+[ext_resource type="PackedScene" uid="uid://6tn68mjkg8i0" path="res://camera.tscn" id="2_m1grj"]
 [ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
 [ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
 [ext_resource type="PackedScene" uid="uid://dmxxvbvs5gyek" path="res://korone/dummy_korone.tscn" id="4_tjfal"]
@@ -34,18 +34,7 @@ operation = 2
 size = Vector3(98, 4, 98)
 material = ExtResource("3_cuvda")
 
-[node name="Camera" type="Node3D" parent="." groups=["CameraController"]]
-script = ExtResource("1_g55f8")
-follow_speed = 5.0
-
-[node name="h" type="Node3D" parent="Camera"]
-
-[node name="v" type="SpringArm3D" parent="Camera/h"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
-collision_mask = 32768
-spring_length = 2.5
-
-[node name="Camera3D" type="Camera3D" parent="Camera/h/v"]
+[node name="Camera" parent="." instance=ExtResource("2_m1grj")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_afvp1")
@@ -60,5 +49,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55835, 0, -6.12357)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.44179, 0, -9.02411)
 
 [node name="DebugPrint" type="Node2D" parent="."]
-position = Vector2(1100, 474)
+position = Vector2(712, 320)
 script = ExtResource("5_jxbxo")

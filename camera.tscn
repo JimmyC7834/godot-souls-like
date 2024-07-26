@@ -1,0 +1,46 @@
+[gd_scene load_steps=6 format=3 uid="uid://6tn68mjkg8i0"]
+
+[ext_resource type="Script" path="res://camera_controller.gd" id="1_bafa3"]
+[ext_resource type="Shader" path="res://world/pixelate_3d.gdshader" id="2_vk254"]
+
+[sub_resource type="QuadMesh" id="QuadMesh_lngmy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_7nywk"]
+render_priority = 0
+shader = ExtResource("2_vk254")
+shader_parameter/shadows_enabled = true
+shader_parameter/highlights_enabled = true
+shader_parameter/shadow_strength = 0.4
+shader_parameter/highlight_strength = 0.1
+shader_parameter/highlight_color = Color(1, 1, 1, 1)
+shader_parameter/shadow_color = Color(0, 0, 0, 1)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_r5624"]
+size = Vector3(10, 7, 25)
+
+[node name="Camera" type="Node3D" groups=["CameraController"]]
+script = ExtResource("1_bafa3")
+follow_speed = 5.0
+
+[node name="h" type="Node3D" parent="."]
+
+[node name="v" type="SpringArm3D" parent="h"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+collision_mask = 32768
+spring_length = 2.5
+
+[node name="Camera3D" type="Camera3D" parent="h/v"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="h/v/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.09365)
+mesh = SubResource("QuadMesh_lngmy")
+surface_material_override/0 = SubResource("ShaderMaterial_7nywk")
+
+[node name="Area3D" type="Area3D" parent="h/v/Camera3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -1)
+collision_layer = 0
+monitorable = false
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="h/v/Camera3D/Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -12)
+shape = SubResource("BoxShape3D_r5624")

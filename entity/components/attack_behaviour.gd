@@ -30,6 +30,7 @@ func attack_behaviour(e: TimeActEvents.TAE) -> Hurtbox:
         if a in hitted: continue
         if not a is Hurtbox: continue
         if a.entity == entity: continue
+        if a.entity.eventa(TimeActEvents.TAE.INVINCIBLE): continue
         
         # set target hitted
         print(name + " hitted " + a.name)

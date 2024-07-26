@@ -8,7 +8,7 @@ var EMPTY_FUNC: Callable = func(): pass
 const SPEED: float = 5.0
 const JUMP_VELOCITY: float = 4.5
 const DIR_FOLLOW_VELOCITY: float = 10.0
-const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/conditions/"
+const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/"
 
 # === Nodes ===
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
@@ -38,13 +38,13 @@ func _ready():
             components[c.type()] = c
             c.entity = self
             
-    animation_tree.set(movement_path("Walking"), false)
-    animation_tree.set(movement_path("Running"), false)
+    animation_tree.set("parameters/Movement/conditions/Walking", false)
+    animation_tree.set("parameters/Movement/conditions/Running", false)
     
     # reset state after animation chain is finished
-    animation_tree.animation_finished.connect(func (a):
-        if a == last_anim:
-            sm.enter_state(S_IDLE))
+    #animation_tree.animation_finished.connect(func (a):
+        #if a == last_anim:
+            #sm.enter_state(S_IDLE))
 
 func _physics_process(delta):
     update_facing_dir()
@@ -86,10 +86,17 @@ func update_facing_dir():
 func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0):
     print("fire one shot " + anim_name)
     tae.clear_all_event()
+
     fire_oneshot(is_oneshot_1, anim_name, seek, scale)
     is_oneshot_1 = !is_oneshot_1
     last_anim = anim_name
     sm.enter_state(S_ANIM)
+    
+    var time: float = (animation_player.get_animation(anim_name).length - (seek if seek > 0 else 0)) / scale
+    await get_tree().create_timer(time).timeout
+    print("wait " + str(time))
+    if anim_name == last_anim:
+        sm.enter_state(S_IDLE)
 
 # fires one host animation with alternating nodes to apply animation blending
 func fire_oneshot(first: bool, anim_name: String, seek: float = -1.0, scale: float = 1.0):
@@ -122,6 +129,3 @@ func is_state(name: String):
 
 func eventa(e: TimeActEvents.TAE):
     return tae.is_event_active(e)
-
-func movement_path(str: String):
-    return ANIM_TREE_MOVEMENT_PATH + str
