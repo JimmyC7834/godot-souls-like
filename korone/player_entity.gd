@@ -3,6 +3,7 @@ extends GameEntity
 class_name PlayerEntity
 
 @onready var camera: PlayerCamera = $"../Camera"
+@onready var cam_h: Node3D = $"../Camera/h"
 
 var blend_position: Vector2 = Vector2(0, 1)
 
@@ -120,7 +121,7 @@ func update_facing_dir():
     if camera.lock_on:
         facing_dir = -global_position.direction_to(camera.lock_on.global_position)
     else:
-        var h_rot = $"../Camera/h".global_transform.basis.get_euler().y
+        var h_rot = cam_h.global_transform.basis.get_euler().y
         var direction: Vector3 = dir_3d
         facing_dir = direction.rotated(Vector3.UP, h_rot).normalized()
 
@@ -138,7 +139,9 @@ func fetch_action_cancel():
                 request_one_shot(r.anim_heavy_atk, 0.1, 1.0)
     
         PlayerInputController.ACTION.ROLL:
-            var angle = atan2(-dir_3d.normalized().x, -dir_3d.normalized().z)
+            var h_rot = cam_h.global_transform.basis.get_euler().y
+            var dir: Vector3 = dir_3d.rotated(Vector3.UP, h_rot).normalized()
+            var angle: float = atan2(-dir.x, -dir.z)
             rotation.y = angle
             call_deferred("request_one_shot", "PC/Roll", -1.0, 1.5)
             #request_one_shot("PC/Roll", -1.0, 1.5)

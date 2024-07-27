@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://b0nfmv86umeve"]
 
 [ext_resource type="Script" path="res://animation/utils/RootAnimationConvertor.gd" id="1_7y30m"]
-[ext_resource type="AnimationLibrary" uid="uid://dtpafl6io1fxk" path="res://animation/ParryCritPack.tres" id="2_qy3d6"]
+[ext_resource type="AnimationLibrary" uid="uid://cmw2063s6xmda" path="res://animation/locomotion_2.glb" id="2_akj5n"]
 
 [node name="Node" type="AnimationPlayer"]
 script = ExtResource("1_7y30m")
-arr = [ExtResource("2_qy3d6")]
+arr = [ExtResource("2_akj5n")]

@@ -13,6 +13,7 @@ enum TAE {
     ITEM_CANCEL = 7,
     CAST_CANCEL = 8,
     
+    TURN_SPEED_ADJUST = 14, # arg1: scale = 1.0
     DISABLE_TURN = 15,
     DISABLE_GRAVITY = 16,
 

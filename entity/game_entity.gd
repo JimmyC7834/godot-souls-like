@@ -75,8 +75,11 @@ func follow_facing_dir(delta):
     
     # turning the character to the input/facing direction
     if facing_dir != Vector3.ZERO:
-        var angle = atan2(-facing_dir.x, -facing_dir.z)
-        rotation.y = lerp_angle(rotation.y, angle, delta * DIR_FOLLOW_VELOCITY)
+        var angle: float = atan2(-facing_dir.x, -facing_dir.z)
+        var v: float = DIR_FOLLOW_VELOCITY
+        if eventa(TimeActEvents.TAE.TURN_SPEED_ADJUST):
+            v *= tae.get_event_args(TimeActEvents.TAE.TURN_SPEED_ADJUST)[0]
+        rotation.y = lerp_angle(rotation.y, angle, delta * v)
 
 func update_facing_dir():
     var direction: Vector3 = dir_3d
