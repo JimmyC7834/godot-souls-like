@@ -26,6 +26,8 @@ var dir_3d: Vector3 = Vector3.ZERO
 var is_oneshot_1: bool = true
 var last_anim: StringName
 
+var general_stats: GeneralStats
+
 # === States ===
 var S_IDLE: State
 var S_ANIM: State
@@ -47,7 +49,7 @@ func _ready():
             #sm.enter_state(S_IDLE))
 
 func _physics_process(delta):
-    update_facing_dir()
+    update_facing_dir(delta)
     follow_facing_dir(delta)
     sm.update(delta)
     update_velocity(delta)
@@ -81,9 +83,9 @@ func follow_facing_dir(delta):
             v *= tae.get_event_args(TimeActEvents.TAE.TURN_SPEED_ADJUST)[0]
         rotation.y = lerp_angle(rotation.y, angle, delta * v)
 
-func update_facing_dir():
+func update_facing_dir(delta):
     var direction: Vector3 = dir_3d
-    facing_dir = direction.normalized()
+    facing_dir = lerp(facing_dir, direction.normalized(), delta * DIR_FOLLOW_VELOCITY)
 
 # initiate an one shot animation and enter aniamtion state
 func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0):
@@ -108,6 +110,11 @@ func fire_oneshot(first: bool, anim_name: String, seek: float = -1.0, scale: flo
     animation_tree.set("parameters/ONESHOT_SEEK_%d/seek_request" % idx, seek)
     animation_tree.set("parameters/ONESHOT_SCALE_%d/scale" % idx, scale)
     animation_tree.set("parameters/ONESHOT_%d/request" % idx, AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
+
+func damage(d: Damage):
+    print(name, "is damaged:", d)
+    for i in d.values.values():
+        general_stats.hp -= i
 
 func one_shot_interupt():
     var idx: int = 1 if !is_oneshot_1 else 2

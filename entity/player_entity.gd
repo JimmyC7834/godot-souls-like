@@ -5,6 +5,9 @@ class_name PlayerEntity
 @onready var camera: PlayerCamera = $"../Camera"
 @onready var cam_h: Node3D = $"../Camera/h"
 
+@export var attributes_preset: AttributePreset
+var attributes: Attributes
+
 var blend_position: Vector2 = Vector2(0, 1)
 
 # === States ===
@@ -103,6 +106,9 @@ func _ready():
     S_ANIM = _S_ANIM
     super._ready()
     
+    attributes = attributes_preset.get_attributes()
+    general_stats = GeneralStats.from_attributes(attributes)
+    
     sm.cur = S_IDLE
     sm.enter_state(S_IDLE)
     
@@ -110,14 +116,16 @@ func _ready():
     if h:
         h.on_hit.connect(
             func (hitbox: Hitbox, hurtbox: Hurtbox):
-                if hitbox.source is Weapon and eventa(TimeActEvents.TAE.STANDBREAK):
-                    if hitbox.source.equipper is PlayerEntity:
+                if hitbox.source is Weapon:
+                    if eventa(TimeActEvents.TAE.STANDBREAK) and hitbox.source.equipper is PlayerEntity:
                         hitbox.source.equipper.request_crit_atk()
                         return
+                    
+                    damage(hitbox.source.get_damage(attributes))
                 one_shot_interupt()
                 request_one_shot("ImpactHead"))
 
-func update_facing_dir():
+func update_facing_dir(delta):
     if camera.lock_on:
         facing_dir = -global_position.direction_to(camera.lock_on.global_position)
     else:
@@ -127,6 +135,7 @@ func update_facing_dir():
 
 func fetch_action_cancel():
     var action = fetch_action()
+
     match action:
         PlayerInputController.ACTION.R_ATK_L:
             var r = equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)
@@ -149,7 +158,7 @@ func fetch_action_cancel():
         PlayerInputController.ACTION.N:
             pass
         _:
-            push_warning("fetched unknown ACTION " + str(action))
+            pass
 
 func request_crit_atk():
     one_shot_interupt()

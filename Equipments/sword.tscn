@@ -1,7 +1,15 @@
-[gd_scene load_steps=7 format=3 uid="uid://dthkyvekgx7ni"]
+[gd_scene load_steps=9 format=3 uid="uid://dthkyvekgx7ni"]
 
 [ext_resource type="Script" path="res://equipments/weapon.gd" id="1_ml35x"]
 [ext_resource type="Script" path="res://entity/hitbox.gd" id="2_ejmsk"]
+[ext_resource type="Script" path="res://damage_scaler.gd" id="2_s4l4s"]
+
+[sub_resource type="Resource" id="Resource_xnkd7"]
+script = ExtResource("2_s4l4s")
+damage_type = 0
+base = 50
+scaling_attribute = 3
+scaling = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ieyj1"]
 resource_name = "knight_texture"
@@ -53,6 +61,7 @@ anim_light_atk = &"SlashDiagonal"
 anim_heavy_atk = &"Parry"
 anim_run_atk = &"Melee360Forward"
 hitbox = NodePath("EntityHitbox")
+scalers = Array[ExtResource("2_s4l4s")]([SubResource("Resource_xnkd7")])
 
 [node name="sword_1handed" type="MeshInstance3D" parent="."]
 transform = Transform3D(27.0484, 27.0484, 11.6949, -28.2843, 28.2843, -4.76837e-07, -8.26952, -8.26952, 38.2522, 0.015, 0.055, 0.025)

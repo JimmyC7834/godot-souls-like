@@ -78,7 +78,7 @@ func _physics_process(delta):
     
     if Input.is_action_pressed("ROLL"):
         run_timer -= delta
-        if run_timer < 0:
+        if run_timer < 0 and peek_action() != ACTION.RUN:
             queue.append([1, ACTION.RUN])
     elif Input.is_action_just_released("ROLL"):
         if run_timer > 0:
@@ -114,6 +114,11 @@ func pop_action():
     if queue.is_empty():
         return ACTION.N
     return queue.pop_front()
+
+func peek_action():
+    if queue.is_empty():
+        return ACTION.N
+    return queue[0][1]
 
 func clear_actions():
     queue.clear()
