@@ -3,7 +3,9 @@ extends Equipment
 class_name Weapon
 
 @export var anim_light_atk: StringName
+@export var light_atk_stamina_cost: float
 @export var anim_heavy_atk: StringName
+@export var heavy_atk_stamina_cost: float
 @export var anim_run_atk: StringName
 @export var hitbox: Hitbox
 

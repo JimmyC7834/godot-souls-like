@@ -39,14 +39,12 @@ func _ready():
         if c is EntityComponent:
             components[c.type()] = c
             c.entity = self
+    
+    sm.cur = S_IDLE
+    sm.enter_state(S_IDLE)
             
     animation_tree.set("parameters/Movement/conditions/Walking", false)
     animation_tree.set("parameters/Movement/conditions/Running", false)
-    
-    # reset state after animation chain is finished
-    #animation_tree.animation_finished.connect(func (a):
-        #if a == last_anim:
-            #sm.enter_state(S_IDLE))
 
 func _physics_process(delta):
     update_facing_dir(delta)
@@ -85,6 +83,7 @@ func follow_facing_dir(delta):
 
 func update_facing_dir(delta):
     var direction: Vector3 = dir_3d
+    if dir_3d == Vector3.ZERO: return
     facing_dir = lerp(facing_dir, direction.normalized(), delta * DIR_FOLLOW_VELOCITY)
 
 # initiate an one shot animation and enter aniamtion state
@@ -112,7 +111,6 @@ func fire_oneshot(first: bool, anim_name: String, seek: float = -1.0, scale: flo
     animation_tree.set("parameters/ONESHOT_%d/request" % idx, AnimationNodeOneShot.ONE_SHOT_REQUEST_FIRE)
 
 func damage(d: Damage):
-    print(name, "is damaged:", d)
     for i in d.values.values():
         general_stats.hp -= i
 

@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://bsoo2rem2hg5i"]
+[gd_scene load_steps=10 format=3 uid="uid://bsoo2rem2hg5i"]
 
 [ext_resource type="PackedScene" uid="uid://6tn68mjkg8i0" path="res://camera.tscn" id="2_m1grj"]
 [ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
 [ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
 [ext_resource type="PackedScene" uid="uid://dmxxvbvs5gyek" path="res://korone/dummy_korone.tscn" id="4_tjfal"]
 [ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
+[ext_resource type="PackedScene" uid="uid://ritkwvn5oa0f" path="res://PlayerStatusPanel.tscn" id="6_dty1p"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
 
@@ -47,3 +48,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55835, 0, -6.12357)
 [node name="DebugPrint" type="Node2D" parent="."]
 position = Vector2(712, 320)
 script = ExtResource("5_jxbxo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PlayerStatusPanel" parent="CanvasLayer" instance=ExtResource("6_dty1p")]
