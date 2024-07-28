@@ -27,6 +27,8 @@ enum TAE {
     ## arg2: AttackValue
     R_ATK = 25,
     L_ATK = 26,
+    
+    CAN_CRITICAL = 27,
 }
 
 const EMPTY_ARGS = [null, null, null]
