@@ -12,7 +12,7 @@ enum TYPE {
 @export var type: TYPE
 var entity: GameEntity
 
-signal on_hit(hitbox: Hitbox)
+signal on_hit(hitbox: Hitbox, atk_value: AttackValue)
 
 func register(e: GameEntity):
     entity = e
@@ -21,5 +21,5 @@ func register(e: GameEntity):
     monitorable = true
     monitoring = true
 
-func hit(hitbox: Hitbox):
-    on_hit.emit(hitbox)
+func hit(hitbox: Hitbox, atk_value: AttackValue = null):
+    on_hit.emit(hitbox, atk_value)

@@ -8,6 +8,7 @@ class_name Weapon
 @export var hitbox: Hitbox
 
 @export var scalers: Array[DamageScaler] = []
+@export var poise_damage: float = 10.0
 
 func _ready():
     hitbox.register(self)

@@ -23,6 +23,13 @@ enum SCALING {
     D,
 }
 
+enum IMPACT {
+    LOW,
+    MEDIUM,
+    HIGH,
+    VERY_HIGH,
+}
+
 var values = {}
 var source: Object
 

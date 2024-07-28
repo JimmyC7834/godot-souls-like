@@ -115,7 +115,7 @@ func _ready():
     var h: HurtboxCollection = get_component(HurtboxCollection.type())
     if h:
         h.on_hit.connect(
-            func (hitbox: Hitbox, hurtbox: Hurtbox):
+            func (hitbox: Hitbox, hurtbox: Hurtbox, atk_value: AttackValue):
                 if hitbox.source is Weapon:
                     if eventa(TimeActEvents.TAE.STANDBREAK) and hitbox.source.equipper is PlayerEntity:
                         hitbox.source.equipper.request_crit_atk()
@@ -123,7 +123,10 @@ func _ready():
                     
                     damage(hitbox.source.get_damage(attributes))
                 one_shot_interupt()
-                request_one_shot("ImpactHead"))
+                if atk_value.impact_rank == Damage.IMPACT.HIGH:
+                    request_one_shot("LM2/Knocked Down")
+                else:
+                    request_one_shot("ImpactHead"))
 
 func update_facing_dir(delta):
     if camera.lock_on:
@@ -152,8 +155,8 @@ func fetch_action_cancel():
             var dir: Vector3 = dir_3d.rotated(Vector3.UP, h_rot).normalized()
             var angle: float = atan2(-dir.x, -dir.z)
             rotation.y = angle
-            call_deferred("request_one_shot", "PC/Roll", -1.0, 1.5)
-            #request_one_shot("PC/Roll", -1.0, 1.5)
+            #call_deferred("request_one_shot", "PC/Roll", -1.0, 1.5)
+            request_one_shot("PC/Roll", -1.0, 1.5)
 
         PlayerInputController.ACTION.N:
             pass

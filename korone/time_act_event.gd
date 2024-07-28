@@ -3,7 +3,7 @@ extends Node
 class_name TimeActEvents
 
 enum TAE {
-    # arg1: string = name of next anim
+    ## arg1: string = name of next anim
     RH_ATK_ANIM_CANCEL = 1,
     LH_ATK_ANIM_CANCEL = 2,
     MOVEMENT_CANCEL = 3,
@@ -23,7 +23,8 @@ enum TAE {
     GUARDING = 23,
     INVINCIBLE = 24,
     
-    # arg1: Array[Area3D] = array of hitted area3d
+    ## arg1: Array[Area3D] = array of hitted area3d
+    ## arg2: AttackValue
     R_ATK = 25,
     L_ATK = 26,
 }
@@ -67,10 +68,10 @@ func clear_all_event():
         event_args[e] = EMPTY_ARGS
         on_event_cleared.emit(e)
 
-func invoke_atk_behaviour(e: TAE):
-    if not e in [TAE.R_ATK, TAE.L_ATK]:
+func invoke_atk_behaviour(e: TAE, atk: AttackValue):
+    if not e in [TAE.R_ATK, TAE.L_ATK] or atk == null:
         push_warning("Incorrect setup for invoke_atk_behaviour in " + name)
         return
     
     clear_event(e)
-    set_event(e, [])
+    set_event(e, [], atk)
