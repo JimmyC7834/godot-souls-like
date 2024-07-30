@@ -1,8 +1,8 @@
 [gd_scene load_steps=3 format=3 uid="uid://b0nfmv86umeve"]
 
-[ext_resource type="Script" path="res://animation/utils/RootAnimationConvertor.gd" id="1_7y30m"]
-[ext_resource type="AnimationLibrary" uid="uid://cmw2063s6xmda" path="res://animation/locomotion_2.glb" id="2_akj5n"]
+[ext_resource type="Script" path="res://animation/utils/RootAnimationConvertor2.gd" id="1_enkid"]
+[ext_resource type="Animation" uid="uid://bpbr038jmmdt4" path="res://out/Take 001.res" id="2_e2doy"]
 
 [node name="Node" type="AnimationPlayer"]
-script = ExtResource("1_7y30m")
-arr = [ExtResource("2_akj5n")]
+script = ExtResource("1_enkid")
+arr = [ExtResource("2_e2doy")]

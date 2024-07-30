@@ -13,12 +13,12 @@ config_version=5
 config/name="godot-souls-like"
 run/main_scene="res://world/main.tscn"
 config/features=PackedStringArray("4.2", "Forward Plus")
-config/icon="res://icon.svg"
+config/icon="res://assets/icon.svg"
 
 [autoload]
 
 Global="*res://autoloads/global.gd"
-Player="*res://player.gd"
+Player="*res://autoloads/player.gd"
 
 [display]
 

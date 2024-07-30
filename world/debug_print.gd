@@ -1,6 +1,6 @@
 extends CanvasItem
 
-const KENNEY_PIXEL = preload("res://Kenney Pixel.ttf")
+const KENNEY_PIXEL = preload("res://assets/Kenney Pixel.ttf")
 @onready var player: PlayerEntity = $"../korone_root"
 
 func _physics_process(delta):

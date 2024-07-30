@@ -2,19 +2,7 @@ extends EntityComponent
 
 class_name HurtboxCollection
 
-@onready var hurtboxes: Array = [
-    $"../Armature_002/Skeleton3D/HurtboxBody1/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxBody2/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxLegUpL/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxLegL/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxLegUpR/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxLegR/Area3D",
-    $"../Armature_002/Skeleton3D/HurtBoxArmUpL/Area3D",
-    $"../Armature_002/Skeleton3D/HurtBoxArmL/Area3D",
-    $"../Armature_002/Skeleton3D/HurtBoxArmUpR/Area3D",
-    $"../Armature_002/Skeleton3D/HurtBoxArmR/Area3D",
-    $"../Armature_002/Skeleton3D/HurtboxHead/Area3D"
-]
+@export var hurtboxes: Array[Area3D] = []
 
 var hit_counts = {}
 var hit_count: int = 0

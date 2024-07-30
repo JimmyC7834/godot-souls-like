@@ -10,4 +10,5 @@ var entity: GameEntity:
 signal on_entity_changed
 
 static func type() -> String:
+    push_error("EntityComponent type not set")
     return "EntityComponent"

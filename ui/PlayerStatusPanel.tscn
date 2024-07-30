@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://ritkwvn5oa0f"]
 
-[ext_resource type="Script" path="res://player_status_panel.gd" id="1_ddlye"]
+[ext_resource type="Script" path="res://ui/player_status_panel.gd" id="1_ddlye"]
 
 [node name="PlayerStatusPanel" type="Control" node_paths=PackedStringArray("health_bar", "stamina_bar")]
 layout_mode = 3

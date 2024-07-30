@@ -14,7 +14,7 @@ const ANIM_TREE_MOVEMENT_PATH: String = "parameters/Movement/"
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var animation_tree: AnimationTree = $AnimationTree
 @onready var tae: TimeActEvents = $TAE
-
+@onready var components_root: Node = $Components
 @onready var equipment: PlayerEquipment = $PlayerEquipment
 
 var action_queue: Array[PlayerInputController.ACTION] = []
@@ -35,10 +35,12 @@ var S_ANIM: State
 var sm: State.StateMachine = State.StateMachine.new()
 
 func _ready():
-    for c in get_children(true):
+    for c in components_root.get_children(true):
         if c is EntityComponent:
             components[c.type()] = c
             c.entity = self
+    
+    facing_dir = Vector3.FORWARD.rotated(Vector3.UP, global_rotation.y)
     
     sm.cur = S_IDLE
     sm.enter_state(S_IDLE)

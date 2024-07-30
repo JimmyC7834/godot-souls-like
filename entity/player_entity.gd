@@ -133,8 +133,8 @@ func handle_on_hit(hitbox: Hitbox, hurtbox: Hurtbox, atk_value: AttackValue):
         damage(hitbox.source.get_damage(attributes))
         one_shot_interupt()
         if atk_value.impact_rank == Damage.IMPACT.HIGH:
-            var angle: float = acos(hitbox.global_position.direction_to(global_position).dot(facing_dir))
-            if angle < PI / 2:
+            var angle: float = facing_dir.angle_to(hitbox.source.equipper.facing_dir)
+            if angle > PI / 2:
                 request_one_shot("LM2/Fall_Backward")
             else:
                 request_one_shot("LM2/Fall_Forward")
@@ -177,7 +177,6 @@ func fetch_action_cancel():
             var dir: Vector3 = dir_3d.rotated(Vector3.UP, h_rot).normalized()
             var angle: float = atan2(-dir.x, -dir.z)
             rotation.y = angle
-            #call_deferred("request_one_shot", "PC/Roll", -1.0, 1.5)
             request_one_shot("PC/Roll", -1.0, 1.5)
 
         PlayerInputController.ACTION.N:
@@ -187,7 +186,3 @@ func fetch_action_cancel():
 
 func stanima_recovery(delta):
     general_stats.stamina += STANIMA_RECOVERY * delta
-
-func request_crit_atk():
-    one_shot_interupt()
-    request_one_shot("PC/Crit")

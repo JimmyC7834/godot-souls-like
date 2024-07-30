@@ -1,6 +1,8 @@
 extends EntityComponent
 
 class_name DebugInfo
+static func type() -> String:
+    return "DebugInfo"
 
 func _ready():
     on_entity_changed.connect(

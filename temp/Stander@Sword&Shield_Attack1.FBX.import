@@ -1,15 +1,15 @@
 [remap]
 
-importer="animation_library"
+importer="scene"
 importer_version=1
-type="AnimationLibrary"
-uid="uid://cp8i2mt4cvorp"
-path="res://.godot/imported/untitled.glb-eaf5a9bc21ca3784ce18d2719a418854.res"
+type="PackedScene"
+uid="uid://cv2qyj75xdspw"
+path="res://.godot/imported/Stander@Sword&Shield_Attack1.FBX-96500d1bee38e6babc4e12eca7804af7.scn"
 
 [deps]
 
-source_file="res://temp/untitled.glb"
-dest_files=["res://.godot/imported/untitled.glb-eaf5a9bc21ca3784ce18d2719a418854.res"]
+source_file="res://temp/Stander@Sword&Shield_Attack1.FBX"
+dest_files=["res://.godot/imported/Stander@Sword&Shield_Attack1.FBX-96500d1bee38e6babc4e12eca7804af7.scn"]
 
 [params]
 

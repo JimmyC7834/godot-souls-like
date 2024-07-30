@@ -1,6 +1,8 @@
 extends EntityComponent
 
 class_name AttackBehaviour
+static func type() -> String:
+    return "AttackBehaviour"
 
 func _physics_process(delta):
     if entity.is_state("ANIM"):
@@ -46,6 +48,3 @@ func attack_behaviour(e: TimeActEvents.TAE) -> Hurtbox:
         return a
 
     return null
-
-static func type() -> String:
-    return "AttackBehaviour"

@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
 [ext_resource type="PackedScene" uid="uid://dmxxvbvs5gyek" path="res://korone/dummy_korone.tscn" id="4_tjfal"]
 [ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
-[ext_resource type="PackedScene" uid="uid://ritkwvn5oa0f" path="res://PlayerStatusPanel.tscn" id="6_dty1p"]
+[ext_resource type="PackedScene" uid="uid://ritkwvn5oa0f" path="res://ui/PlayerStatusPanel.tscn" id="6_dty1p"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
 
