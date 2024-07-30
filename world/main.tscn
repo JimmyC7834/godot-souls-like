@@ -52,3 +52,5 @@ script = ExtResource("5_jxbxo")
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
 [node name="PlayerStatusPanel" parent="CanvasLayer" instance=ExtResource("6_dty1p")]
+offset_top = 30.0
+offset_bottom = 70.0

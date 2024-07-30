@@ -20,8 +20,7 @@ func get_backstab_target() -> Backstabbable:
         if b is PlayerEntity and \
             b.get_component(Backstabbable.type()):
             var a: float = b.facing_dir.angle_to(entity.facing_dir)
-            #var a: float = acos(b.global_position.direction_to(entity.global_position).dot(entity.facing_dir))
-            if a < PI / 2:
+            if a < PI / 4:
                 return b.get_component(Backstabbable.type())
     return null
 

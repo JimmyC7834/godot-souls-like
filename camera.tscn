@@ -20,7 +20,7 @@ size = Vector3(10, 7, 25)
 
 [node name="Camera" type="Node3D" groups=["CameraController"]]
 script = ExtResource("1_bafa3")
-follow_speed = 5.0
+follow_speed = 4.0
 
 [node name="h" type="Node3D" parent="."]
 

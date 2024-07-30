@@ -1,0 +1,8 @@
+[gd_resource type="Resource" script_class="Consumable" load_steps=2 format=3 uid="uid://btobar0fb2v2b"]
+
+[ext_resource type="Script" path="res://items/consumable.gd" id="1_3lisg"]
+
+[resource]
+script = ExtResource("1_3lisg")
+use_anim = &"UseItem"
+display_name = &"Healing Grass"

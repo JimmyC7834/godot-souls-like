@@ -3,13 +3,14 @@ extends GameEntity
 class_name PlayerEntity
 
 const RUNNING_STANIMA_COST: float = 10
-const STANIMA_RECOVERY: float = 18
+const STANIMA_RECOVERY: float = 25
 
 @onready var camera: PlayerCamera = $"../Camera"
 @onready var cam_h: Node3D = $"../Camera/h"
 
 @export var attributes_preset: AttributePreset
 var attributes: Attributes
+var inventory: Inventory = Inventory.new()
 
 var blend_position: Vector2 = Vector2(0, 1)
 
@@ -171,7 +172,7 @@ func fetch_action_cancel():
     
         PlayerInputController.ACTION.ROLL when general_stats.stamina > 0:
             one_shot_interupt()
-            general_stats.stamina -= 15.0
+            general_stats.stamina -= 20.0
             
             var h_rot = cam_h.global_transform.basis.get_euler().y
             var dir: Vector3 = dir_3d.rotated(Vector3.UP, h_rot).normalized()
@@ -179,6 +180,14 @@ func fetch_action_cancel():
             rotation.y = angle
             request_one_shot("PC/Roll", -1.0, 1.5)
 
+        PlayerInputController.ACTION.ITEM_USE:
+            one_shot_interupt()
+            var item: Consumable = inventory.get_current_item()
+            if item:
+                request_one_shot(item.use_anim, -1.0, 0.75, func ():
+                    item.used_by(self)
+                    inventory.consume_item(item))
+            
         PlayerInputController.ACTION.N:
             pass
         _:

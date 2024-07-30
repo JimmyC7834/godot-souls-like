@@ -33,6 +33,8 @@ var ACTION_EVENT_MAP = {
         return tae.is_event_active(TimeActEvents.TAE.ROLL_CANCEL),
     ACTION.RUN: func():
         return tae.is_event_active(TimeActEvents.TAE.MOVEMENT_CANCEL),
+    ACTION.ITEM_USE: func():
+        return tae.is_event_active(TimeActEvents.TAE.ITEM_CANCEL),
     ACTION.STOP_RUN: func():
         return true,
 }
@@ -44,6 +46,7 @@ const ACTION_MAP = {
     "MOVE_RIGHT": ACTION.MOVEMENT,
     "R1": ACTION.R_ATK_L,
     "R2": ACTION.R_ATK_H,
+    "USE_ITEM": ACTION.ITEM_USE,
     #"ROLL": ACTION.ROLL,
 }
 

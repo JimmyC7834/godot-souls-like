@@ -89,7 +89,8 @@ func update_facing_dir(delta):
     facing_dir = lerp(facing_dir, direction.normalized(), delta * DIR_FOLLOW_VELOCITY)
 
 # initiate an one shot animation and enter aniamtion state
-func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0):
+func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0, 
+                        callback: Callable = EMPTY_FUNC, args = []):
     print("fire one shot " + anim_name)
     tae.clear_all_event()
 
@@ -100,8 +101,12 @@ func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 
     
     var time: float = (animation_player.get_animation(anim_name).length - (seek if seek > 0 else 0)) / scale
     await get_tree().create_timer(time).timeout
-    print("wait " + str(time))
+        
     if anim_name == last_anim:
+        if args.is_empty():
+            callback.call()
+        else:
+            callback.callv(args)
         sm.enter_state(S_IDLE)
 
 # fires one host animation with alternating nodes to apply animation blending
