@@ -23,8 +23,9 @@ var equipments = {
 const SWORD = preload("res://Equipments/sword.tscn")
 
 func _ready():
-    var s = SWORD.instantiate()
-    equip(s, SLOT.RIGHT_HAND)
+    pass
+    #var s = SWORD.instantiate()
+    #equip(s, SLOT.RIGHT_HAND)
 
 func equip(e: Equipment, slot: SLOT):
     if equipments[slot] == e: return

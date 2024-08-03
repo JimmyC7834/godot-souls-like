@@ -2,8 +2,8 @@
 
 [ext_resource type="PackedScene" uid="uid://6tn68mjkg8i0" path="res://camera.tscn" id="2_m1grj"]
 [ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
-[ext_resource type="PackedScene" uid="uid://o0qdr2i3h4cs" path="res://korone/korone.tscn" id="4_l3lo7"]
 [ext_resource type="PackedScene" uid="uid://dmxxvbvs5gyek" path="res://korone/dummy_korone.tscn" id="4_tjfal"]
+[ext_resource type="PackedScene" uid="uid://dt0ld7g3v1uka" path="res://temp/temp.tscn" id="4_wpqeb"]
 [ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
 [ext_resource type="PackedScene" uid="uid://ritkwvn5oa0f" path="res://ui/PlayerStatusPanel.tscn" id="6_dty1p"]
 
@@ -34,16 +34,20 @@ operation = 2
 size = Vector3(98, 4, 98)
 material = ExtResource("3_cuvda")
 
+[node name="CSGBox3D3" type="CSGBox3D" parent="Field"]
+transform = Transform3D(-0.305211, -0.546369, 0.779954, -0.92866, 0.352073, -0.11677, -0.210802, -0.759952, -0.614847, -8.74008, -3.84069, -4.66731)
+size = Vector3(8, 8, 8)
+
 [node name="Camera" parent="." instance=ExtResource("2_m1grj")]
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_afvp1")
 
-[node name="korone_root" parent="." instance=ExtResource("4_l3lo7")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+[node name="korone_root" parent="." instance=ExtResource("4_wpqeb")]
 
 [node name="korone_root2" parent="." instance=ExtResource("4_tjfal")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55835, 0, -6.12357)
+visible = false
 
 [node name="DebugPrint" type="Node2D" parent="."]
 position = Vector2(712, 320)

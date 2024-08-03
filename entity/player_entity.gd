@@ -178,7 +178,8 @@ func fetch_action_cancel():
             var dir: Vector3 = dir_3d.rotated(Vector3.UP, h_rot).normalized()
             var angle: float = atan2(-dir.x, -dir.z)
             rotation.y = angle
-            request_one_shot("PC/Roll", -1.0, 1.5)
+            #request_one_shot("PC/Roll", -1.0, 1.5)
+            request_one_shot("Base/DodgeRoll", -1.0, 0.5)
 
         PlayerInputController.ACTION.ITEM_USE:
             one_shot_interupt()
