@@ -27,8 +27,8 @@ func scaled_hp_bar_length():
 func scaled_stamina_bar_length():
     return sqrt((Player.player.general_stats.max_stamina - 50) / 2500 * 100) / 10 * MAX_STAMINA_BAR_LENGTH
 
-func update_hp_bar(diff: float):
+func update_hp_bar(_diff: float):
     health_bar.value = Player.player.general_stats.hp
 
-func update_stamina_bar(diff: float):
+func update_stamina_bar(_diff: float):
     stamina_bar.value = Player.player.general_stats.stamina

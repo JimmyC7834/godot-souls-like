@@ -1,8 +1,9 @@
-[gd_scene load_steps=9 format=3 uid="uid://dthkyvekgx7ni"]
+[gd_scene load_steps=10 format=3 uid="uid://dthkyvekgx7ni"]
 
 [ext_resource type="Script" path="res://equipments/weapon.gd" id="1_ml35x"]
 [ext_resource type="Script" path="res://entity/hitbox.gd" id="2_ejmsk"]
-[ext_resource type="Script" path="res://stats/damage_scaler.gd" id="2_s4l4s"]
+[ext_resource type="Script" path="res://player/stats/damage_scaler.gd" id="2_s4l4s"]
+[ext_resource type="Resource" uid="uid://lj1q44yykouw" path="res://equipments/movesets/sword_moveset.tres" id="2_x7ryq"]
 
 [sub_resource type="Resource" id="Resource_xnkd7"]
 script = ExtResource("2_s4l4s")
@@ -57,6 +58,7 @@ height = 0.858
 [node name="Sword" type="Node3D" node_paths=PackedStringArray("hitbox")]
 transform = Transform3D(0.67621, 0.67621, 0.292372, -0.707107, 0.707107, 1.05367e-08, -0.206738, -0.206738, 0.956305, 0.015, 0.055, 0.025)
 script = ExtResource("1_ml35x")
+moveset = ExtResource("2_x7ryq")
 anim_light_atk = &"SlashDiagonal"
 light_atk_stamina_cost = 30.0
 anim_heavy_atk = &"Parry"
@@ -64,6 +66,7 @@ heavy_atk_stamina_cost = 50.0
 anim_run_atk = &"Melee360Forward"
 hitbox = NodePath("EntityHitbox")
 scalers = Array[ExtResource("2_s4l4s")]([SubResource("Resource_xnkd7")])
+poise_damage = null
 
 [node name="sword_1handed" type="MeshInstance3D" parent="."]
 transform = Transform3D(27.0484, 27.0484, 11.6949, -28.2843, 28.2843, -4.76837e-07, -8.26952, -8.26952, 38.2522, 0.015, 0.055, 0.025)

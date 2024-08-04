@@ -4,47 +4,31 @@ class_name AttackBehaviour
 static func type() -> String:
     return "AttackBehaviour"
 
-func _physics_process(delta):
-    if entity.is_state("ANIM"):
-        attack_behaviour_check()
+func _entity_ready():
+    entity.tae.on_atk_behaviour_started.connect(start_attack)
+    entity.tae.on_atk_behaviour_finished.connect(finish_attack)
 
-func attack_behaviour_check():
+func start_attack(e: TimeActEvents.TAE, atk_info: AttackInfo):
     if entity.eventa(TimeActEvents.TAE.R_ATK):
-        attack_behaviour(TimeActEvents.TAE.R_ATK)
-    
-    if entity.eventa(TimeActEvents.TAE.L_ATK):
-        attack_behaviour(TimeActEvents.TAE.L_ATK)
-            
-func attack_behaviour(e: TimeActEvents.TAE) -> Hurtbox:
-    if not e in [TimeActEvents.TAE.L_ATK, TimeActEvents.TAE.R_ATK]: return
-    
-    var w: Weapon
-    if e == TimeActEvents.TAE.L_ATK:
-        w = entity.equipment.get_equipment(PlayerEquipment.SLOT.LEFT_HAND)
-    else:
-        w = entity.equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)        
-    
-    var hits: Array[Area3D] = w.hitbox.get_overlapping_areas()
-    var p: ParryStandBreak = entity.get_component(ParryStandBreak.type())
-    
-    for a in hits:
-        var hitted = entity.tae.get_event_args(e)[0]
-        if a in hitted: continue
-        if not a is Hurtbox: continue
-        if a.entity == entity: continue
-        if a.entity.eventa(TimeActEvents.TAE.INVINCIBLE): continue
-        
-        var atk_value = entity.tae.get_event_args(e)[1]
-        
-        # set target hitted
-        print(name + " hitted " + a.name)
-        if p and p.is_parried_by(a.entity):
-            p.parried_behaviour()
-        else:
-            a.hit(w.hitbox, atk_value)
+        enable_weapon_hitbox(
+            entity.equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND),
+            atk_info)
+    elif entity.eventa(TimeActEvents.TAE.L_ATK):
+        enable_weapon_hitbox(
+            entity.equipment.get_equipment(PlayerEquipment.SLOT.LEFT_HAND),
+            atk_info)
 
-        hitted.append(a.entity)
-        entity.tae.event_args[e] = [hitted, atk_value, null]
-        return a
+func finish_attack(e: TimeActEvents.TAE):
+    if entity.eventa(TimeActEvents.TAE.R_ATK):
+        disable_weapon_hitbox(
+            entity.equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND))
+    elif entity.eventa(TimeActEvents.TAE.L_ATK):
+        disable_weapon_hitbox(
+            entity.equipment.get_equipment(PlayerEquipment.SLOT.LEFT_HAND))
 
-    return null
+func enable_weapon_hitbox(w: Weapon, atk_info: AttackInfo):
+    if entity is PlayerEntity:
+        w.hitbox.enable(w.get_damage(entity.attributes), atk_info)
+
+func disable_weapon_hitbox(w: Weapon):
+    w.hitbox.disable()

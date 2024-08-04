@@ -2,6 +2,7 @@ extends Equipment
 
 class_name Weapon
 
+@export var moveset: WeaponMoveset
 @export var anim_light_atk: StringName
 @export var light_atk_stamina_cost: float
 @export var anim_heavy_atk: StringName

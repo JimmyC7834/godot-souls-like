@@ -1,11 +1,14 @@
-[gd_scene load_steps=10 format=3 uid="uid://bsoo2rem2hg5i"]
+[gd_scene load_steps=16 format=3 uid="uid://bsoo2rem2hg5i"]
 
 [ext_resource type="PackedScene" uid="uid://6tn68mjkg8i0" path="res://camera.tscn" id="2_m1grj"]
 [ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
-[ext_resource type="PackedScene" uid="uid://dmxxvbvs5gyek" path="res://korone/dummy_korone.tscn" id="4_tjfal"]
-[ext_resource type="PackedScene" uid="uid://dt0ld7g3v1uka" path="res://temp/temp.tscn" id="4_wpqeb"]
+[ext_resource type="PackedScene" uid="uid://cbngx0sgbvvu5" path="res://player/player.tscn" id="3_uvkwg"]
 [ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
 [ext_resource type="PackedScene" uid="uid://ritkwvn5oa0f" path="res://ui/PlayerStatusPanel.tscn" id="6_dty1p"]
+[ext_resource type="Script" path="res://world/csg_hitbox_tester.gd" id="6_k8xw8"]
+[ext_resource type="Texture2D" uid="uid://d0qs8f7ml1fis" path="res://world/texture_08.png" id="6_nqvqc"]
+[ext_resource type="Script" path="res://entity/hitbox.gd" id="8_2fag6"]
+[ext_resource type="Script" path="res://player/stats/attack_value.gd" id="8_klp26"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
 
@@ -17,6 +20,20 @@ background_mode = 2
 background_color = Color(0.0588235, 0.32549, 1, 1)
 background_energy_multiplier = 2.0
 sky = SubResource("Sky_t2s3g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_42tm6"]
+albedo_texture = ExtResource("6_nqvqc")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[sub_resource type="Resource" id="Resource_etagw"]
+script = ExtResource("8_klp26")
+atk_type = 0
+action_value = 1.0
+impact_rank = 0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_jlu3u"]
 
 [node name="World" type="Node3D"]
 
@@ -43,11 +60,7 @@ size = Vector3(8, 8, 8)
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_afvp1")
 
-[node name="korone_root" parent="." instance=ExtResource("4_wpqeb")]
-
-[node name="korone_root2" parent="." instance=ExtResource("4_tjfal")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.55835, 0, -6.12357)
-visible = false
+[node name="player" parent="." instance=ExtResource("3_uvkwg")]
 
 [node name="DebugPrint" type="Node2D" parent="."]
 position = Vector2(712, 320)
@@ -58,3 +71,18 @@ script = ExtResource("5_jxbxo")
 [node name="PlayerStatusPanel" parent="CanvasLayer" instance=ExtResource("6_dty1p")]
 offset_top = 30.0
 offset_bottom = 70.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="." node_paths=PackedStringArray("hitbox")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.74611, 0.735976, 7.87819)
+material = SubResource("StandardMaterial3D_42tm6")
+script = ExtResource("6_k8xw8")
+hitbox = NodePath("Hitbox")
+interval = 2.0
+attack_info = SubResource("Resource_etagw")
+color = Color(1, 0.431373, 0.431373, 1)
+
+[node name="Hitbox" type="Area3D" parent="CSGBox3D"]
+script = ExtResource("8_2fag6")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CSGBox3D/Hitbox"]
+shape = SubResource("BoxShape3D_jlu3u")

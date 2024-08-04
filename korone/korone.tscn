@@ -1,12 +1,12 @@
 [gd_scene load_steps=122 format=3 uid="uid://o0qdr2i3h4cs"]
 
 [ext_resource type="Script" path="res://entity/player_entity.gd" id="1_i1l1m"]
-[ext_resource type="Script" path="res://stats/attribute_preset.gd" id="2_8eriy"]
+[ext_resource type="Script" path="res://player/stats/attribute_preset.gd" id="2_8eriy"]
 [ext_resource type="Material" uid="uid://71fju5x7ybmp" path="res://korone/res/korone_skin.tres" id="2_h1c80"]
-[ext_resource type="Script" path="res://korone/time_act_event.gd" id="2_xewmi"]
+[ext_resource type="Script" path="res://player/time_act_event.gd" id="2_xewmi"]
 [ext_resource type="Script" path="res://entity/components/player_input_controller.gd" id="3_mssms"]
 [ext_resource type="Script" path="res://entity/components/hurtbox_collection.gd" id="4_b14cu"]
-[ext_resource type="Script" path="res://korone/player_equipment.gd" id="5_cc0u5"]
+[ext_resource type="Script" path="res://player/player_equipment.gd" id="5_cc0u5"]
 [ext_resource type="Script" path="res://entity/components/attack_behaviour.gd" id="6_567r3"]
 [ext_resource type="Script" path="res://entity/components/parry_standbreak.gd" id="6_scqgu"]
 [ext_resource type="Script" path="res://entity/hurtbox.gd" id="8_jx43y"]
@@ -14,8 +14,8 @@
 [ext_resource type="Script" path="res://entity/components/debug_info.gd" id="8_sru68"]
 [ext_resource type="Script" path="res://entity/components/backstab_capable.gd" id="9_ivebe"]
 [ext_resource type="Script" path="res://entity/components/ik.gd" id="10_wrayg"]
-[ext_resource type="AnimationLibrary" uid="uid://li4un1qeaayp" path="res://animation/old_packs/locomotion2.res" id="11_0ad5v"]
-[ext_resource type="Script" path="res://stats/attack_value.gd" id="12_4mutj"]
+[ext_resource type="AnimationLibrary" uid="uid://li4un1qeaayp" path="res://assets/animation/old_packs/locomotion2.res" id="11_0ad5v"]
+[ext_resource type="Script" path="res://player/stats/attack_value.gd" id="12_4mutj"]
 
 [sub_resource type="Resource" id="Resource_b0u8x"]
 script = ExtResource("2_8eriy")

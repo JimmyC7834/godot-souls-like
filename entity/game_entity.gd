@@ -91,6 +91,7 @@ func update_facing_dir(delta):
 # initiate an one shot animation and enter aniamtion state
 func request_one_shot(anim_name: StringName, seek: float = -1.0, scale: float = 1.0, 
                         callback: Callable = EMPTY_FUNC, args = []):
+    if animation_player.get_animation(anim_name) == null: return
     print("fire one shot " + anim_name)
     tae.clear_all_event()
 
@@ -123,7 +124,7 @@ func damage(d: Damage):
 
 func one_shot_interupt():
     var idx: int = 1 if !is_oneshot_1 else 2
-    animation_tree.set("parameters/ONESHOT_%d/request" % idx, AnimationNodeOneShot.ONE_SHOT_REQUEST_ABORT)
+    animation_tree.set("parameters/ONESHOT_%d/request" % idx, AnimationNodeOneShot.ONE_SHOT_REQUEST_FADE_OUT)
 
 func get_component(t):
     if not components.has(t): return null
@@ -139,8 +140,8 @@ func fetch_action() -> PlayerInputController.ACTION:
         return PlayerInputController.ACTION.N
     return action_queue.pop_front()
 
-func is_state(name: String):
-    return sm.cur.name == name
+func is_state(type: State.Type):
+    return sm.cur.type == type
 
 func eventa(e: TimeActEvents.TAE):
     return tae.is_event_active(e)

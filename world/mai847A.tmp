@@ -1,0 +1,68 @@
+[gd_scene load_steps=12 format=3 uid="uid://bsoo2rem2hg5i"]
+
+[ext_resource type="PackedScene" uid="uid://6tn68mjkg8i0" path="res://camera.tscn" id="2_m1grj"]
+[ext_resource type="Material" uid="uid://b830axkc8ngpk" path="res://world/prototype_light.tres" id="3_cuvda"]
+[ext_resource type="PackedScene" uid="uid://cbngx0sgbvvu5" path="res://player/player.tscn" id="3_uvkwg"]
+[ext_resource type="Script" path="res://world/debug_print.gd" id="5_jxbxo"]
+[ext_resource type="PackedScene" uid="uid://ritkwvn5oa0f" path="res://ui/PlayerStatusPanel.tscn" id="6_dty1p"]
+[ext_resource type="Script" path="res://world/csg_hitbox_tester.gd" id="6_k8xw8"]
+[ext_resource type="Texture2D" uid="uid://d0qs8f7ml1fis" path="res://world/texture_08.png" id="6_nqvqc"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_mb8aw"]
+
+[sub_resource type="Sky" id="Sky_t2s3g"]
+sky_material = SubResource("ProceduralSkyMaterial_mb8aw")
+
+[sub_resource type="Environment" id="Environment_afvp1"]
+background_mode = 2
+background_color = Color(0.0588235, 0.32549, 1, 1)
+background_energy_multiplier = 2.0
+sky = SubResource("Sky_t2s3g")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_42tm6"]
+albedo_texture = ExtResource("6_nqvqc")
+uv1_scale = Vector3(0.5, 0.5, 0.5)
+uv1_triplanar = true
+uv1_world_triplanar = true
+
+[node name="World" type="Node3D"]
+
+[node name="Field" type="CSGCombiner3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+use_collision = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="Field"]
+size = Vector3(100, 5, 100)
+material = ExtResource("3_cuvda")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="Field"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+operation = 2
+size = Vector3(98, 4, 98)
+material = ExtResource("3_cuvda")
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="Field"]
+transform = Transform3D(-0.305211, -0.546369, 0.779954, -0.92866, 0.352073, -0.11677, -0.210802, -0.759952, -0.614847, -8.74008, -3.84069, -4.66731)
+size = Vector3(8, 8, 8)
+
+[node name="Camera" parent="." instance=ExtResource("2_m1grj")]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_afvp1")
+
+[node name="player" parent="." instance=ExtResource("3_uvkwg")]
+
+[node name="DebugPrint" type="Node2D" parent="."]
+position = Vector2(712, 320)
+script = ExtResource("5_jxbxo")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="PlayerStatusPanel" parent="CanvasLayer" instance=ExtResource("6_dty1p")]
+offset_top = 30.0
+offset_bottom = 70.0
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1.74611, 0.735976, 7.87819)
+material = SubResource("StandardMaterial3D_42tm6")
+script = ExtResource("6_k8xw8")

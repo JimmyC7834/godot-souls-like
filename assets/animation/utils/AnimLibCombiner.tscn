@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://cs6hfun0madip"]
+
+[ext_resource type="Script" path="res://assets/animation/utils/anim_lib_combiner.gd" id="1_ke3i8"]
+
+[node name="AnimLibCombiner" type="AnimationPlayer"]
+script = ExtResource("1_ke3i8")
+out_name = &"Damage"
+folder_path = &"res://assets/animation/platform/98_Damage"

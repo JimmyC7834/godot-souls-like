@@ -8,7 +8,7 @@ static func type() -> String:
 @export var riposte_point: Node3D
 var disabled: bool = false
 
-func _physics_process(delta):
+func _physics_process(_delta):
     if entity.eventa(TimeActEvents.TAE.STANDBREAK):
         var c: RiposteCapable = get_riposte_source()
         if !c: return

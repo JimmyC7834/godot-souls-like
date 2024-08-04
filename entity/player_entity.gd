@@ -8,6 +8,7 @@ const STANIMA_RECOVERY: float = 25
 @onready var camera: PlayerCamera = $"../Camera"
 @onready var cam_h: Node3D = $"../Camera/h"
 
+@export var default_moveset: WeaponMoveset
 @export var attributes_preset: AttributePreset
 var attributes: Attributes
 var inventory: Inventory = Inventory.new()
@@ -16,11 +17,12 @@ var blend_position: Vector2 = Vector2(0, 1)
 
 # === States ===
 var _S_IDLE: State = State.new(
-    "IDLE",
+    State.Type.IDLE,
     func ():
         animation_tree.set("parameters/Movement/conditions/Idle", true)
         tae.clear_all_event()
-        tae.set_event(1),        
+        tae.set_event(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)
+        tae.set_event(TimeActEvents.TAE.ROLL_CANCEL),        
     func (delta):
         stanima_recovery(delta)
         
@@ -35,13 +37,13 @@ var _S_IDLE: State = State.new(
 )
 
 var S_WALKING: State = State.new(
-    "WALKING",
+    State.Type.WALKING,
     func ():
         animation_tree.set("parameters/Movement/conditions/Walking", true)
 
         tae.clear_all_event()        
-        tae.set_event(1)
-        tae.set_event(4),
+        tae.set_event(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)
+        tae.set_event(TimeActEvents.TAE.ROLL_CANCEL),
     func (delta):
         var b_pos: Vector2 = animation_tree.get("parameters/Movement/Walking/blend_position")
         animation_tree.set("parameters/Movement/Walking/blend_position",
@@ -66,7 +68,7 @@ var S_WALKING: State = State.new(
 )
 
 var S_RUNNING: State = State.new(
-    "RUNNING",
+    State.Type.RUNNING,
     func ():
         animation_tree.set("parameters/Movement/conditions/Running", true)
         tae.clear_all_event(),
@@ -90,14 +92,14 @@ var S_RUNNING: State = State.new(
 )
 
 var _S_ANIM: State = State.new(
-    "ANIM",
+    State.Type.ANIM,
     func ():
         tae.clear_all_event(),
-    func (delta):
+    func (_delta):
         fetch_action_cancel()
         
         var a = get_component(AttackBehaviour.type()) as AttackBehaviour
-        a.attack_behaviour_check()
+        #a.attack_behaviour_check()
         ,
     EMPTY_FUNC,
 )
@@ -116,7 +118,7 @@ func _ready():
     if is_in_group("Player"):
         Player.player = self
 
-func update_facing_dir(delta):
+func update_facing_dir(_delta):
     if camera.lock_on:
         facing_dir = -global_position.direction_to(camera.lock_on.global_position)
     else:
@@ -125,15 +127,15 @@ func update_facing_dir(delta):
         if dir_3d == Vector3.ZERO: return
         facing_dir = direction.rotated(Vector3.UP, h_rot).normalized()
 
-func handle_on_hit(hitbox: Hitbox, hurtbox: Hurtbox, atk_value: AttackValue):
+func handle_on_hit(hitbox: Hitbox, hurtbox: Hurtbox, atk_info: AttackInfo):
     if hitbox.source is Weapon:
-        if eventa(TimeActEvents.TAE.STANDBREAK) and hitbox.source.equipper is PlayerEntity:
-            hitbox.source.equipper.request_crit_atk()
-            return
+        #if eventa(TimeActEvents.TAE.STANDBREAK) and hitbox.source.equipper is PlayerEntity:
+            #hitbox.source.equipper.request_crit_atk()
+            #return
         
         damage(hitbox.source.get_damage(attributes))
         one_shot_interupt()
-        if atk_value.impact_rank == Damage.IMPACT.HIGH:
+        if atk_info.impact_rank == Damage.IMPACT.HIGH:
             var angle: float = facing_dir.angle_to(hitbox.source.equipper.facing_dir)
             if angle > PI / 2:
                 request_one_shot("LM2/Fall_Backward")
@@ -149,19 +151,19 @@ func fetch_action_cancel():
     match action:
         PlayerInputController.ACTION.R_ATK_L when general_stats.stamina > 0:
             var r = equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)
-            if r is Weapon:
-                one_shot_interupt()
-                
-                if is_state("ANIM"):
-                    if !tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0] or !tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1]:
-                        return
-                    request_one_shot(
-                        tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0],
-                        tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1])
+            one_shot_interupt()
+
+            if tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0] and \
+                tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1]:
+                request_one_shot(
+                    tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[0],
+                    tae.get_event_args(TimeActEvents.TAE.RH_ATK_ANIM_CANCEL)[1])
+            else:
+                if r is Weapon:
+                    request_one_shot(r.moveset.R_ATK_L)                
+                    general_stats.stamina -= r.light_atk_stamina_cost
                 else:
-                    request_one_shot(r.anim_light_atk)
-                
-                general_stats.stamina -= r.light_atk_stamina_cost
+                    request_one_shot(default_moveset.R_ATK_L)                
     
         PlayerInputController.ACTION.R_ATK_H when general_stats.stamina > 0:
             var r = equipment.get_equipment(PlayerEquipment.SLOT.RIGHT_HAND)

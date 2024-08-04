@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="WeaponMoveset" load_steps=2 format=3 uid="uid://b1ckvyl2g4xm1"]
+
+[ext_resource type="Script" path="res://equipments/weapon_moveset.gd" id="1_wj1te"]
+
+[resource]
+script = ExtResource("1_wj1te")
+R_ATK_L = &"Fighter/Attack1"
+R_ATK_H = &""
+RUNNING_ATK = &""
+L_ATK_L = &""
+L_ATK_H = &""

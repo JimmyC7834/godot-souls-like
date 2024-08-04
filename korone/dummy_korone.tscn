@@ -1,11 +1,11 @@
 [gd_scene load_steps=121 format=3 uid="uid://dmxxvbvs5gyek"]
 
 [ext_resource type="Script" path="res://entity/player_entity.gd" id="1_ixrd2"]
-[ext_resource type="Script" path="res://korone/time_act_event.gd" id="2_b8eyg"]
-[ext_resource type="Script" path="res://stats/attribute_preset.gd" id="2_j6b6b"]
+[ext_resource type="Script" path="res://player/time_act_event.gd" id="2_b8eyg"]
+[ext_resource type="Script" path="res://player/stats/attribute_preset.gd" id="2_j6b6b"]
 [ext_resource type="Script" path="res://entity/components/dummy_input.gd" id="3_kn32b"]
 [ext_resource type="Script" path="res://entity/components/hurtbox_collection.gd" id="4_tbnsp"]
-[ext_resource type="Script" path="res://korone/player_equipment.gd" id="5_ra7sw"]
+[ext_resource type="Script" path="res://player/player_equipment.gd" id="5_ra7sw"]
 [ext_resource type="Script" path="res://entity/components/attack_behaviour.gd" id="6_wyb0m"]
 [ext_resource type="Script" path="res://entity/components/parry_standbreak.gd" id="7_g0h2u"]
 [ext_resource type="Material" uid="uid://71fju5x7ybmp" path="res://korone/res/korone_skin.tres" id="8_mhlbm"]
@@ -13,8 +13,8 @@
 [ext_resource type="Script" path="res://entity/hurtbox.gd" id="9_33fxg"]
 [ext_resource type="Script" path="res://entity/components/backstabbable.gd" id="9_lwa8u"]
 [ext_resource type="Script" path="res://entity/components/ripostable.gd" id="10_6elk8"]
-[ext_resource type="Script" path="res://stats/attack_value.gd" id="12_5l3dw"]
-[ext_resource type="AnimationLibrary" uid="uid://li4un1qeaayp" path="res://animation/old_packs/locomotion2.res" id="14_kphi1"]
+[ext_resource type="Script" path="res://player/stats/attack_value.gd" id="12_5l3dw"]
+[ext_resource type="AnimationLibrary" uid="uid://li4un1qeaayp" path="res://assets/animation/old_packs/locomotion2.res" id="14_kphi1"]
 
 [sub_resource type="Resource" id="Resource_ykps3"]
 script = ExtResource("2_j6b6b")

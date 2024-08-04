@@ -1,8 +1,0 @@
-[gd_scene load_steps=2 format=3 uid="uid://cs6hfun0madip"]
-
-[ext_resource type="Script" path="res://animation/utils/anim_lib_combiner.gd" id="1_ke3i8"]
-
-[node name="AnimLibCombiner" type="AnimationPlayer"]
-script = ExtResource("1_ke3i8")
-out_name = &"base_1"
-folder_path = &"res://animation/platform/00_Base"
